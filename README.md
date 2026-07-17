@@ -1,335 +1,328 @@
-# AI-Powered Four-Wheel Rover
+# AI Robot Rover 
 
-## About the Project
+<img width="1047" height="784" alt="Screenshot 2026-07-17 162009" src="https://github.com/user-attachments/assets/a63409c2-3627-46df-b194-ce78d9ab0392" />
 
-This project is a four-wheel mobile robot designed to move around, detect obstacles, react to sound and light, communicate through Bluetooth, and use a camera with artificial intelligence.
+A modular, 3D-printable indoor robot rover built around a Raspberry Pi 4 and an ESP32.
 
-The idea started because I was bored and wanted to build something real instead of just watching videos or starting another project that I would forget about after a few days.
+The project combines a parametric mechanical chassis, motor control, environmental sensors, a camera, autonomous behaviors, and a local web interface for controlling the robot from a phone or computer.
 
-At first, I only wanted to make a simple robot car. Then I started adding more ideas, such as obstacle detection, Bluetooth control, a camera, sound detection, light sensing, and artificial intelligence.
+> [!IMPORTANT]
+> The chassis design and software prototype are complete, but the full robot has not yet been physically assembled or tested.
 
-The goal is to build a robot that can work in both manual and autonomous modes. It should also be modular, so I can improve it over time without rebuilding everything from the beginning.
+## Project goals
 
-## Main Goals
+The long-term goal is to build a small indoor assistant robot capable of:
 
-The robot should be able to:
+- manual control from a phone;
+- autonomous obstacle avoidance;
+- camera-based object detection;
+- navigation between rooms using visual markers;
+- receiving simple voice commands;
+- playing sounds or messages through a speaker;
+- carrying small objects or messages around the house.
 
-* move forward and backward;
-* turn left and right;
-* detect obstacles in front and on both sides;
-* avoid obstacles automatically;
-* connect to a phone or computer through Bluetooth;
-* react to light levels;
-* detect sounds;
-* display its status using LEDs;
-* use a camera to observe its surroundings;
-* recognize simple objects using artificial intelligence;
-* switch between manual and autonomous control.
+One planned example is telling the robot to go to the living room or to a family member's room. The robot would follow a known route, recognize a visual marker at its destination, stop, and play a notification sound.
 
-## Why I Chose This Project
+## Hardware architecture
 
-I started this project because I was bored and wanted to challenge myself with something that combined several things I was interested in.
+The robot uses two main computers:
 
-I wanted to create something physical that I could actually test, improve, and control. Building a robot seemed like a good way to learn programming, electronics, 3D design, and artificial intelligence at the same time.
+### Raspberry Pi 4
 
-The project became more serious as I worked on it. What started as a small idea slowly turned into a complete rover with several sensors, a camera, Bluetooth control, and its own AI system.
+The Raspberry Pi handles high-level functions:
 
-## Artificial Intelligence
-
-The artificial intelligence part has taken the most time.
-
-Making the robot move is not the hardest part. The real challenge is making it understand what it sees and react correctly.
-
-For the AI system, I need to:
-
-* capture images from the camera;
-* process those images on the Raspberry Pi;
-* use a lightweight object-detection model;
-* keep the detection fast enough for a moving robot;
-* send movement decisions to the ESP32;
-* combine camera information with data from the other sensors.
-
-The first version of the AI will not be extremely advanced. The main goal is for the robot to recognize a few objects and make simple decisions based on what it sees.
-
-For example, the robot could detect an obstacle, identify an object, stop, or choose another direction.
-
-This part requires a lot of testing because the Raspberry Pi must process the camera image while the robot is still moving and reading sensor data.
-
-## How the Robot Works
-
-The robot will use two main control boards.
-
-### Raspberry Pi
-
-The Raspberry Pi will handle:
-
-* the camera;
-* image processing;
-* object detection;
-* artificial intelligence;
-* high-level decisions;
-* communication with the ESP32.
+- camera processing;
+- object detection;
+- web server and control interface;
+- navigation logic;
+- communication with the ESP32;
+- future voice recognition and audio playback.
 
 ### ESP32
 
-The ESP32 will handle:
+The ESP32 handles real-time hardware control:
+
+- four DC motors;
+- two TB6612FNG motor drivers;
+- ultrasonic distance sensors;
+- LEDs;
+- environmental sensors;
+- emergency stopping;
+- serial communication with the Raspberry Pi.
+
+## Planned hardware
+
+- Raspberry Pi 4
+- ESP32 development board
+- 4 DC geared motors
+- 2 TB6612FNG motor drivers
+- Raspberry Pi Camera Module 3 Wide
+- HC-SR04 ultrasonic sensors
+- BH1750 light sensor
+- microphone
+- LEDs
+- battery and power regulation system
+- future USB speaker
+- 3D-printed mechanical chassis
+- M3 screws, nuts, and threaded inserts
+
+Exact motor, battery, and mounting dimensions may still be adjusted to match the purchased hardware.
+
+## Mechanical design
+
+The chassis was designed as a parametric, multi-part KCL project in Zoo Design Studio.
+
+### Main dimensions
+
+| Property | Value |
+|---|---:|
+| Main deck size | 280 × 200 mm |
+| Mechanical stack height | 148 mm |
+| Approximate maximum length with angled inserts | 304 mm |
+| M3 clearance hole | 3.4 mm |
+| Maximum individual print area | 220 × 220 mm |
+
+All individual parts are designed to fit on a standard 220 × 220 mm print bed.
+
+### Mechanical features
+
+- split lower deck for easier printing;
+- three alignment tongues between lower-deck sections;
+- aligned M3 joint holes;
+- removable front and rear panels;
+- removable corner brackets;
+- reserved mounting areas for motors, battery, and motor drivers;
+- cable-routing openings;
+- separate sensor and camera inserts;
+- modular upper electronics plate;
+- removable top cover;
+- editable shared parameters;
+- exploded and inspection assemblies.
+
+The current model intentionally contains only mechanical geometry and empty mounting provisions. Electronics, motors, wheels, batteries, cameras, sensors, and cables are not modeled as solid components.
+
+## CAD files
+
+The main CAD files include:
+
+```text
+cad/
+├── main.kcl
+├── explodedView.kcl
+├── lowerDeckAssembly.kcl
+├── parameters.kcl
+├── chassisDimensions.md
+├── removableCornerBracket.kcl
+└── printable-parts/
+```
 
-* motor control;
-* ultrasonic sensors;
-* the light sensor;
-* the sound sensor;
-* the LEDs;
-* Bluetooth communication;
-* fast hardware responses.
+The exact directory structure may differ depending on how the exported Zoo project is organized.
 
-The Raspberry Pi acts as the main brain, while the ESP32 controls the hardware and reacts quickly to sensor information.
+### Main CAD documents
 
-## Planned Dimensions
+- `main.kcl` contains the complete assembled chassis.
+- `explodedView.kcl` contains the exploded assembly.
+- `lowerDeckAssembly.kcl` provides a clear view of the split-deck joint.
+- `parameters.kcl` contains shared editable dimensions.
+- `chassisDimensions.md` documents dimensions, quantities, print envelopes, and export information.
 
-The approximate dimensions are:
+### Printable parts
 
-* length: 280 mm;
-* width: 200 mm;
-* maximum height: 150 mm;
-* wheel diameter: between 65 and 80 mm;
-* ground clearance: between 15 and 25 mm.
+The project contains separate KCL parts for:
 
-The chassis will have two levels.
+- front lower plate;
+- rear lower plate;
+- upper electronics plate;
+- top cover;
+- front sensor panel;
+- rear utility panel;
+- ultrasonic mounting insert;
+- camera mounting insert;
+- lower spacer posts;
+- upper spacer posts;
+- removable corner brackets.
 
-The lower level will contain the motors, battery, motor drivers, power system, and most of the wiring.
+STEP and STL binaries are not currently included because the original design environment exports KCL source files. Each printable part is isolated and ready to be exported from Zoo Design Studio.
 
-The upper level will contain the Raspberry Pi, ESP32, camera, sensors, and electronic modules.
+## Software
 
-## Required Parts
+The software is divided between the ESP32 and Raspberry Pi.
 
-### Main Control Boards
+```text
+software/
+├── esp32/
+└── raspberry-pi/
+```
 
-* 1 Raspberry Pi 4 with 4 GB of RAM;
-* 1 ESP32 DevKit;
-* 1 microSD card with 32 or 64 GB of storage;
-* 1 microSD card reader;
-* 1 Raspberry Pi cooling fan or heatsink kit.
+### ESP32 software
 
-### Camera and Artificial Intelligence
+The ESP32 firmware is responsible for:
 
-* 1 Raspberry Pi Camera Module 3 Wide;
-* 1 compatible CSI ribbon cable;
-* 1 adjustable camera mount;
-* Python;
-* OpenCV;
-* TensorFlow Lite or another lightweight AI framework;
-* a lightweight object-detection model.
+- motor control;
+- serial command parsing;
+- ultrasonic sensor measurements;
+- lighting control;
+- Bluetooth communication;
+- autonomous safety behavior.
 
-### Motors and Movement
+### Raspberry Pi software
 
-* 4 DC geared motors;
-* 4 wheels between 65 and 80 mm;
-* 2 TB6612FNG dual motor drivers;
-* 4 motor mounts;
-* 1 two-level chassis;
-* M3 screws, nuts, washers, and spacers.
+The Raspberry Pi application includes:
 
-### Sensors
+- robot control logic;
+- camera support;
+- object-detection prototype;
+- serial communication with the ESP32;
+- operating-mode management;
+- local web server;
+- phone-friendly control interface;
+- installation script;
+- systemd service;
+- tests.
 
-* 3 HC-SR04 ultrasonic sensors;
-* 1 BH1750 light sensor;
-* 1 analog microphone or sound-detection module;
-* 1 logic-level converter from 5 V to 3.3 V;
-* resistors for voltage dividers;
-* jumper wires.
+## Web control interface
 
-### Bluetooth
+The Raspberry Pi hosts a local control website.
 
-Bluetooth will mainly be handled by the ESP32 because it already includes Bluetooth support.
+The interface is intended to provide:
 
-It will be used to:
+- movement controls;
+- speed adjustment;
+- operating-mode selection;
+- emergency stop;
+- sensor information;
+- connection status;
+- AI detection information.
 
-* control the robot from a phone;
-* send movement commands;
-* switch between different modes;
-* control the LEDs;
-* receive information from the robot;
-* stop the robot remotely.
+When the robot is connected to the same Wi-Fi network as a phone or computer, the interface can be opened using the Raspberry Pi's local IP address.
 
-The Raspberry Pi may also use Bluetooth if needed, but the ESP32 will be responsible for the main remote-control system.
+Example:
 
-### LEDs and Indicators
+```text
+http://192.168.1.42:5000
+```
 
-* 4 to 8 standard or RGB LEDs;
-* 220 to 330 ohm resistors;
-* an optional WS2812B LED strip or ring;
-* an optional active buzzer.
+The exact IP address depends on the local network.
 
-The LEDs can be used to show different states.
+## Operating modes
 
-For example:
+The planned modes include:
 
-* green for normal operation;
-* blue for an active Bluetooth connection;
-* orange when an obstacle is detected;
-* red for an error or low battery.
+### Manual mode
 
-### Power System
+The user controls movement from the web interface or Bluetooth.
 
-* 1 protected rechargeable battery pack;
-* 1 compatible battery charger;
-* 1 voltage converter providing a stable 5.1 V output;
-* 1 main power switch;
-* 1 fuse;
-* 1 battery voltage-monitoring module;
-* suitable power connectors;
-* electrical wiring.
+### Autonomous mode
 
-The battery should be placed low and near the center of the chassis to keep the robot stable.
+The robot uses its distance sensors to move while avoiding obstacles.
 
-The motors and Raspberry Pi should receive stable power, and all grounds should be connected correctly.
+### AI vision mode
 
-### Construction and Wiring
+The Raspberry Pi camera runs an object-detection prototype. The current software may use a person as its default target, but this behavior can be changed.
 
-* Dupont jumper wires;
-* flexible electrical wire;
-* JST connectors;
-* screw terminals;
-* heat-shrink tubing;
-* cable ties;
-* a small prototyping board;
-* M3 screws;
-* M3 nuts;
-* washers;
-* spacers;
-* ultrasonic sensor mounts;
-* camera mount;
-* battery holder;
-* wheel guards;
-* small screwdrivers;
-* a multimeter;
-* soldering equipment.
+### Future navigation mode
 
-## Sensor Placement
+A future version will use visual markers such as AprilTags or ArUco markers.
 
-The three ultrasonic sensors will be placed at the front of the robot.
+Each room or waypoint can have a unique marker. The robot will use these markers to follow routes and recognize when it has reached a destination.
 
-One sensor will face directly forward.
+## Current project status
 
-The other two sensors will point slightly to the left and right, at an angle of around 35 degrees.
+### Completed
 
-This should allow the robot to detect obstacles before hitting them and choose a safer direction.
+- [x] Parametric chassis design
+- [x] Separate printable parts
+- [x] Main mechanical assembly
+- [x] Exploded assembly
+- [x] Split lower-deck system
+- [x] Removable corner brackets
+- [x] Motor and battery reserved zones
+- [x] ESP32 firmware prototype
+- [x] Raspberry Pi software prototype
+- [x] Local web interface prototype
+- [x] Installation script and service files
 
-The light sensor will be placed on top of the robot and away from the LEDs so that the robot does not measure its own light.
+### Not yet completed
 
-The microphone will be placed as far as possible from the motors because motor noise and vibration could affect its readings.
+- [ ] Print physical chassis parts
+- [ ] Purchase and measure final hardware
+- [ ] Assemble the complete rover
+- [ ] Test motor direction and speed
+- [ ] Test battery and power distribution
+- [ ] Validate sensor measurements
+- [ ] Validate emergency-stop behavior
+- [ ] Test the Raspberry Pi and ESP32 protocol
+- [ ] Test the web interface on the physical robot
+- [ ] Add visual-marker navigation
+- [ ] Add voice commands
+- [ ] Add speaker notifications
+- [ ] Document real-world test results
 
-The camera will be mounted at the front and slightly higher than the ultrasonic sensors to give it a clear view.
+## Safety
 
-## Control Modes
+Initial motor tests should be performed with the wheels raised off the ground.
 
-### Bluetooth Mode
+Before autonomous testing:
 
-In Bluetooth mode, the robot can be controlled from a phone or computer.
+- verify the emergency stop;
+- use a low movement speed;
+- keep cables away from wheels;
+- securely mount the battery;
+- add suitable power protection and a fuse;
+- test in an open indoor area;
+- keep the robot away from stairs and fragile objects.
 
-The planned commands are:
+## Repository structure
 
-* move forward;
-* move backward;
-* turn left;
-* turn right;
-* stop;
-* control the LEDs;
-* change the operating mode.
+A possible repository layout is:
 
-### Autonomous Mode
+```text
+AI-Robot-Rover/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── docs/
+│   └── images/
+│       └── chassis-final.png
+├── cad/
+│   ├── main.kcl
+│   ├── explodedView.kcl
+│   ├── lowerDeckAssembly.kcl
+│   ├── parameters.kcl
+│   └── chassisDimensions.md
+└── software/
+    ├── esp32/
+    └── raspberry-pi/
+```
 
-In autonomous mode, the robot will use the ultrasonic sensors to avoid obstacles.
+## Development notes
 
-If it detects something in front of it, it will stop, compare the distances on the left and right, and choose a safer direction.
+Some parts of the initial CAD and software were created with assistance from AI development tools.
 
-### AI Mode
+All generated work will be reviewed, adapted, physically tested, and documented during the construction process. A generated design passing software validation does not guarantee that every mechanical tolerance or hardware integration detail will work correctly on the first physical build.
 
-In AI mode, the robot will use the camera and Raspberry Pi to analyze its surroundings.
+## Future ideas
 
-Depending on the model being used, it may be able to recognize certain objects and react differently to them.
+- indoor room-to-room navigation;
+- voice activation;
+- destination markers;
+- speaker announcements;
+- automatic charging station;
+- motor encoders;
+- IMU-assisted movement;
+- battery monitoring;
+- removable payload platform;
+- improved camera mount;
+- physical emergency-stop button.
 
-The AI will work together with the ultrasonic sensors because the camera alone may not always give accurate distance information.
+## License
 
-## 3D Design
+A license has not yet been selected.
 
-The chassis will be designed for 3D printing.
-
-The design should be:
-
-* modular;
-* easy to assemble;
-* easy to repair;
-* compatible with M3 screws;
-* strong enough to hold all components;
-* suitable for a standard 3D printer;
-* divided into separate printable parts;
-* easy to modify later.
-
-The design will include:
-
-* a lower chassis plate;
-* an upper electronics plate;
-* four motor mounts;
-* three ultrasonic sensor mounts;
-* an adjustable camera mount;
-* a Raspberry Pi mount;
-* an ESP32 mount;
-* a battery holder;
-* motor-driver mounts;
-* LED mounts;
-* a light-sensor mount;
-* a microphone mount;
-* wheel protection;
-* ventilation openings;
-* cable-routing holes.
-
-## Main Challenges
-
-One of the biggest challenges is fitting all the components inside a compact robot without making the wiring difficult to manage.
-
-Other challenges include:
-
-* keeping the Raspberry Pi cool;
-* reducing camera vibration;
-* reducing noise around the microphone;
-* supplying enough power to the motors;
-* preventing voltage drops;
-* reading several sensors at the same time;
-* avoiding interference between ultrasonic sensors;
-* maintaining a stable Bluetooth connection;
-* running artificial intelligence quickly enough;
-* connecting the Raspberry Pi and ESP32 reliably.
-
-The AI system is the most difficult part because it requires the robot to process images, understand the result, and react while everything else is still running.
-
-## Future Improvements
-
-Possible future upgrades include:
-
-* a robotic arm;
-* person-following mode;
-* a movable camera using servomotors;
-* voice commands;
-* a custom mobile application;
-* better object recognition;
-* room mapping;
-* GPS;
-* a small display;
-* automatic charging;
-* improved battery monitoring;
-* more advanced autonomous navigation.
-
-## Conclusion
-
-This project started because I was bored, but it became a much bigger challenge than I expected.
-
-It gives me the opportunity to learn about programming, electronics, robotics, artificial intelligence, Bluetooth communication, and 3D design in one project.
-
-The first version will probably not work perfectly, and that is part of the process. The goal is to build it, test it, find problems, and improve it step by step.
-
-Even if the robot drives into a wall during the first tests, at least the obstacle-detection system will know what to work on next.
+Before other people reuse the project, an open-source license such as the MIT License, Apache-2.0, or CERN Open Hardware Licence should be added.
 
 ## Author
 
-Created by **[Your name or username]** for Hack Club.
+Created by **YOUR NAME OR USERNAME** as a personal robotics and engineering project.
+
+Built for learning, experimenting, and sharing with the Hack Club community. 🚀
