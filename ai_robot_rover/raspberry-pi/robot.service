@@ -1,0 +1,21 @@
+[Unit]
+Description=AI Robot Rover - controle securise Raspberry Pi
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=@@ROBOT_USER@@
+SupplementaryGroups=dialout video
+WorkingDirectory=@@ROBOT_DIR@@
+ExecStart=@@ROBOT_DIR@@/start_robot.sh
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=5
+KillSignal=SIGTERM
+Environment=PYTHONUNBUFFERED=1
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

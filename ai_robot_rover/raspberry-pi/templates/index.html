@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#111827">
+  <title>AI Robot Rover</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>AI Robot Rover</h1>
+      <p class="subtitle">Commande locale sécurisée</p>
+    </div>
+    <div id="connectionBadge" class="badge offline"><span class="dot"></span><span id="connectionText">Hors ligne</span></div>
+  </header>
+
+  <main>
+    <section class="panel status-strip" aria-label="État principal">
+      <div><span>Mode</span><strong id="currentMode">MANUAL</strong></div>
+      <div><span>Vitesse</span><strong><span id="currentSpeed">0</span>/{{ max_speed }}</strong></div>
+      <div><span>ESP32</span><strong id="serialState">Déconnecté</strong></div>
+      <div><span>Bluetooth</span><strong id="bluetoothState">Déconnecté</strong></div>
+    </section>
+
+    <section id="emergencyBanner" class="emergency-banner hidden" role="alert">
+      ARRÊT D'URGENCE VERROUILLÉ
+      <button id="clearEmergency" type="button">Réarmer si la zone est sûre</button>
+    </section>
+
+    <div class="layout">
+      <section class="panel controls-panel">
+        <h2>Conduite</h2>
+        <div class="drive-grid" aria-label="Commandes de mouvement">
+          <button class="move-btn secondary" data-action="ROTATE_LEFT" aria-label="Pivoter à gauche">↶<small>Q</small></button>
+          <button class="move-btn forward" data-action="FORWARD" aria-label="Avancer">▲<small>W / ↑</small></button>
+          <button class="move-btn secondary" data-action="ROTATE_RIGHT" aria-label="Pivoter à droite">↷<small>E</small></button>
+          <button class="move-btn" data-action="LEFT" aria-label="Tourner à gauche">◀<small>A / ←</small></button>
+          <button id="stopButton" class="stop-btn" type="button">STOP<small>Espace</small></button>
+          <button class="move-btn" data-action="RIGHT" aria-label="Tourner à droite">▶<small>D / →</small></button>
+          <span></span>
+          <button class="move-btn" data-action="BACKWARD" aria-label="Reculer">▼<small>S / ↓</small></button>
+          <span></span>
+        </div>
+        <button id="emergencyButton" class="emergency-btn" type="button">ARRÊT D'URGENCE</button>
+        <p class="hold-hint">Maintenez une direction. Le relâchement, la perte du navigateur ou du réseau provoque STOP.</p>
+      </section>
+
+      <section class="panel settings-panel">
+        <h2>Réglages</h2>
+        <label for="modeSelect">Mode de contrôle</label>
+        <select id="modeSelect">
+          <option value="MANUAL">Manuel Web</option>
+          <option value="BLUETOOTH">Bluetooth direct</option>
+          <option value="AUTONOMOUS">Autonome</option>
+          <option value="AI">Intelligence artificielle</option>
+        </select>
+
+        <label for="speedSlider">Vitesse <output id="speedOutput">120</output></label>
+        <input id="speedSlider" type="range" min="0" max="{{ max_speed }}" value="120" step="1">
+
+        <label class="toggle-row" for="ledToggle">
+          <span>LEDs d'état</span>
+          <input id="ledToggle" type="checkbox" checked>
+        </label>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Capteurs</h2>
+      <div class="sensor-grid">
+        <article><span>Gauche</span><strong id="distanceLeft">—</strong><small>cm</small></article>
+        <article><span>Centre</span><strong id="distanceCenter">—</strong><small>cm</small></article>
+        <article><span>Droite</span><strong id="distanceRight">—</strong><small>cm</small></article>
+        <article><span>Luminosité</span><strong id="lightLevel">—</strong><small>lux</small></article>
+        <article><span>Son</span><strong id="soundLevel">—</strong><small>ADC</small></article>
+        <article><span>État IA</span><strong id="aiState">ARRÊT</strong></article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Objets détectés</h2>
+      <div id="objectsList" class="objects-list"><p class="muted">Aucune détection</p></div>
+    </section>
+
+    <section class="panel errors-panel">
+      <h2>Événements et erreurs</h2>
+      <p id="lastEvent">Démarrage</p>
+      <ul id="errorsList"><li class="muted">Aucune erreur</li></ul>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
