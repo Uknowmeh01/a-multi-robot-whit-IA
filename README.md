@@ -323,6 +323,7 @@ Before other people reuse the project, an open-source license such as the MIT Li
 
 ## Author
 
-Created by **YOUR NAME OR USERNAME** as a personal robotics and engineering project.
+Created by **Uknowmeh01** as a personal robotics and engineering project.
 
-Built for learning, experimenting, and sharing with the Hack Club community. 🚀
+Built for learning, experimenting, and sharing with the Hack Club community. 
+
