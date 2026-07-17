@@ -1,0 +1,25 @@
+// Upper-level spacer post
+// Printed 70 mm structural standoff with M3 clearance bore.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+
+outerSketch = sketch(on = XY) {
+  outer = circle(start = [var 4mm, var 0mm], center = [var 0mm, var 0mm])
+  coincident([outer.center, ORIGIN])
+  horizontal([outer.center, outer.start])
+  diameter(outer) == spacerOuterDiameter
+}
+innerSketch = sketch(on = XY) {
+  inner = circle(start = [var 1.7mm, var 0mm], center = [var 0mm, var 0mm])
+  coincident([inner.center, ORIGIN])
+  horizontal([inner.center, inner.start])
+  diameter(inner) == m3ClearanceDiameter
+}
+outerBody = extrude(region(point = [3mm, 0mm], sketch = outerSketch), length = upperSpacerHeight, symmetric = true)
+innerCutter = extrude(region(point = [0mm, 0mm], sketch = innerSketch), length = upperSpacerHeight + 4mm, symmetric = true)
+export upperSpacerPost = subtract(outerBody, tools = [innerCutter])
+  |> appearance(color = "#7f898f", roughness = 48, metalness = 12)
+hide(outerSketch)
+hide(innerSketch)
+upperSpacerPost

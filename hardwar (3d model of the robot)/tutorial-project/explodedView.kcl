@@ -1,0 +1,133 @@
+// Four-wheel AI robot chassis exploded view
+// Separated printable parts show the split base, removable decks, service panels, spacers, and sensor inserts.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import "lowerFrontPlate.kcl" as lowerFrontPlatePart
+import "lowerRearPlateFinal.kcl" as lowerRearPlatePart
+import "upperElectronicsPlate.kcl" as upperElectronicsPlatePart
+import "topCover.kcl" as topCoverPart
+import "frontSensorPanel.kcl" as frontSensorPanelPart
+import "rearUtilityPanel.kcl" as rearUtilityPanelPart
+import "lowerSpacerPost.kcl" as lowerSpacerPostPart
+import "upperSpacerPost.kcl" as upperSpacerPostPart
+import "ultrasonicInsert.kcl" as ultrasonicInsertPart
+import "cameraInsert.kcl" as cameraInsertPart
+
+explodedLowerFront = lowerFrontPlatePart
+  |> translate(y = -95mm, global = true)
+explodedLowerRear = lowerRearPlatePart
+  |> translate(y = 95mm, global = true)
+explodedUpperPlate = upperElectronicsPlatePart
+  |> translate(z = 105mm, global = true)
+explodedTopCover = topCoverPart
+  |> translate(z = 215mm, global = true)
+
+explodedFrontPanel = frontSensorPanelPart
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = -220mm, z = 72mm, global = true)
+explodedRearPanel = rearUtilityPanelPart
+  |> rotate(axis = X, angle = -90deg, global = true)
+  |> translate(y = 220mm, z = 58mm, global = true)
+
+lowerPostLeftFront = lowerSpacerPostPart
+  |> translate(
+       x = -86mm,
+       y = -82mm,
+       z = 54mm,
+       global = true,
+     )
+lowerPostRightFront = clone(lowerPostLeftFront)
+  |> translate(x = 172mm, global = true)
+lowerPostLeftMidFront = clone(lowerPostLeftFront)
+  |> translate(y = 57mm, global = true)
+lowerPostRightMidFront = clone(lowerPostRightFront)
+  |> translate(y = 57mm, global = true)
+lowerPostLeftMidRear = clone(lowerPostLeftFront)
+  |> translate(y = 107mm, global = true)
+lowerPostRightMidRear = clone(lowerPostRightFront)
+  |> translate(y = 107mm, global = true)
+lowerPostLeftRear = clone(lowerPostLeftFront)
+  |> translate(y = 164mm, global = true)
+lowerPostRightRear = clone(lowerPostRightFront)
+  |> translate(y = 164mm, global = true)
+
+upperPostLeftFront = upperSpacerPostPart
+  |> translate(
+       x = -86mm,
+       y = -82mm,
+       z = 160mm,
+       global = true,
+     )
+upperPostRightFront = clone(upperPostLeftFront)
+  |> translate(x = 172mm, global = true)
+upperPostLeftMidFront = clone(upperPostLeftFront)
+  |> translate(y = 57mm, global = true)
+upperPostRightMidFront = clone(upperPostRightFront)
+  |> translate(y = 57mm, global = true)
+upperPostLeftMidRear = clone(upperPostLeftFront)
+  |> translate(y = 107mm, global = true)
+upperPostRightMidRear = clone(upperPostRightFront)
+  |> translate(y = 107mm, global = true)
+upperPostLeftRear = clone(upperPostLeftFront)
+  |> translate(y = 164mm, global = true)
+upperPostRightRear = clone(upperPostRightFront)
+  |> translate(y = 164mm, global = true)
+
+explodedLeftUltrasonicSeed = clone(ultrasonicInsertPart)
+explodedRightUltrasonicSeed = clone(ultrasonicInsertPart)
+explodedCenterUltrasonicInsert = ultrasonicInsertPart
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = -270mm, z = 60mm, global = true)
+explodedLeftUltrasonicInsert = explodedLeftUltrasonicSeed
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> rotate(axis = Z, angle = -35deg, global = true)
+  |> translate(
+       x = -78mm,
+       y = -260mm,
+       z = 60mm,
+       global = true,
+     )
+explodedRightUltrasonicInsert = explodedRightUltrasonicSeed
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> rotate(axis = Z, angle = 35deg, global = true)
+  |> translate(
+       x = 78mm,
+       y = -260mm,
+       z = 60mm,
+       global = true,
+     )
+explodedCameraInsert = cameraInsertPart
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = -270mm, z = 118mm, global = true)
+
+export robotChassisExploded = flatten([
+  explodedLowerFront,
+  explodedLowerRear,
+  explodedUpperPlate,
+  explodedTopCover,
+  explodedFrontPanel,
+  explodedRearPanel,
+  lowerPostLeftFront,
+  lowerPostRightFront,
+  lowerPostLeftMidFront,
+  lowerPostRightMidFront,
+  lowerPostLeftMidRear,
+  lowerPostRightMidRear,
+  lowerPostLeftRear,
+  lowerPostRightRear,
+  upperPostLeftFront,
+  upperPostRightFront,
+  upperPostLeftMidFront,
+  upperPostRightMidFront,
+  upperPostLeftMidRear,
+  upperPostRightMidRear,
+  upperPostLeftRear,
+  upperPostRightRear,
+  explodedCenterUltrasonicInsert,
+  explodedLeftUltrasonicInsert,
+  explodedRightUltrasonicInsert,
+  explodedCameraInsert
+])
+
+robotChassisExploded

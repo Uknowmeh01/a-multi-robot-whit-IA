@@ -1,0 +1,8 @@
+default_file = "project.toml"
+title = "tutorial-project"
+
+[settings.meta]
+id = "74d69eb3-06e1-4b8e-9d54-6335447101ef"
+
+[settings.app]
+[settings.modeling]

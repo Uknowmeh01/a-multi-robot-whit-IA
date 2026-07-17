@@ -1,0 +1,164 @@
+// Four-wheel AI robot empty chassis assembly
+// Placement-only assembly of printable mechanical parts, spacers, service panels, and corner brackets.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import "lowerDeckAssembly.kcl" as lowerDeckAssemblyPart
+import "upperElectronicsPlate.kcl" as upperElectronicsPlatePart
+import "topCover.kcl" as topCoverPart
+import "frontSensorPanel.kcl" as frontSensorPanelPart
+import "rearUtilityPanel.kcl" as rearUtilityPanelPart
+import "lowerSpacerPost.kcl" as lowerSpacerPostPart
+import "upperSpacerPost.kcl" as upperSpacerPostPart
+import "ultrasonicInsert.kcl" as ultrasonicInsertPart
+import "cameraInsert.kcl" as cameraInsertPart
+import "removableCornerBracket.kcl" as removableCornerBracketPart
+
+lowerPostCenterZ = basePlateThickness + lowerSpacerHeight / 2
+upperPostCenterZ = upperPlateZ + upperPlateThickness + upperSpacerHeight / 2
+frontPanelCenterZ = basePlateThickness + frontPanelHeight / 2
+rearPanelCenterZ = basePlateThickness + rearPanelHeight / 2
+frontPanelCenterY = -chassisLength / 2
+rearPanelCenterY = chassisLength / 2
+sensorInsertFrontY = frontPanelCenterY - panelThickness
+ultrasonicCenterZ = frontPanelCenterZ - 12mm
+cameraCenterZ = frontPanelCenterZ + 25mm
+
+assemblyLowerDeck = lowerDeckAssemblyPart
+assemblyUpperPlate = upperElectronicsPlatePart
+  |> translate(z = upperPlateZ, global = true)
+assemblyTopCover = topCoverPart
+  |> translate(z = topCoverZ, global = true)
+assemblyFrontPanel = frontSensorPanelPart
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = frontPanelCenterY, z = frontPanelCenterZ, global = true)
+assemblyRearPanel = rearUtilityPanelPart
+  |> rotate(axis = X, angle = -90deg, global = true)
+  |> translate(y = rearPanelCenterY, z = rearPanelCenterZ, global = true)
+
+lowerPostLeftFront = lowerSpacerPostPart
+  |> translate(
+       x = -86mm,
+       y = -82mm,
+       z = lowerPostCenterZ,
+       global = true,
+     )
+lowerPostRightFront = clone(lowerPostLeftFront)
+  |> translate(x = 172mm, global = true)
+lowerPostLeftMidFront = clone(lowerPostLeftFront)
+  |> translate(y = 57mm, global = true)
+lowerPostRightMidFront = clone(lowerPostRightFront)
+  |> translate(y = 57mm, global = true)
+lowerPostLeftMidRear = clone(lowerPostLeftFront)
+  |> translate(y = 107mm, global = true)
+lowerPostRightMidRear = clone(lowerPostRightFront)
+  |> translate(y = 107mm, global = true)
+lowerPostLeftRear = clone(lowerPostLeftFront)
+  |> translate(y = 164mm, global = true)
+lowerPostRightRear = clone(lowerPostRightFront)
+  |> translate(y = 164mm, global = true)
+
+upperPostLeftFront = upperSpacerPostPart
+  |> translate(
+       x = -86mm,
+       y = -82mm,
+       z = upperPostCenterZ,
+       global = true,
+     )
+upperPostRightFront = clone(upperPostLeftFront)
+  |> translate(x = 172mm, global = true)
+upperPostLeftMidFront = clone(upperPostLeftFront)
+  |> translate(y = 57mm, global = true)
+upperPostRightMidFront = clone(upperPostRightFront)
+  |> translate(y = 57mm, global = true)
+upperPostLeftMidRear = clone(upperPostLeftFront)
+  |> translate(y = 107mm, global = true)
+upperPostRightMidRear = clone(upperPostRightFront)
+  |> translate(y = 107mm, global = true)
+upperPostLeftRear = clone(upperPostLeftFront)
+  |> translate(y = 164mm, global = true)
+upperPostRightRear = clone(upperPostRightFront)
+  |> translate(y = 164mm, global = true)
+
+leftUltrasonicSeed = clone(ultrasonicInsertPart)
+rightUltrasonicSeed = clone(ultrasonicInsertPart)
+centerUltrasonicInsert = ultrasonicInsertPart
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = sensorInsertFrontY, z = ultrasonicCenterZ, global = true)
+leftUltrasonicInsert = leftUltrasonicSeed
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> rotate(axis = Z, angle = -35deg, global = true)
+  |> translate(
+       x = -62mm,
+       y = sensorInsertFrontY,
+       z = ultrasonicCenterZ,
+       global = true,
+     )
+rightUltrasonicInsert = rightUltrasonicSeed
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> rotate(axis = Z, angle = 35deg, global = true)
+  |> translate(
+       x = 62mm,
+       y = sensorInsertFrontY,
+       z = ultrasonicCenterZ,
+       global = true,
+     )
+frontCameraInsert = cameraInsertPart
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = sensorInsertFrontY, z = cameraCenterZ, global = true)
+
+frontCornerBracket = removableCornerBracketPart
+  |> translate(
+       x = -frontPanelWidth / 2 + cornerBracketLeg / 2,
+       y = frontPanelCenterY + panelThickness / 2,
+       z = basePlateThickness + cornerBracketHeight / 2,
+       global = true,
+     )
+rearCornerBracket = removableCornerBracketPart
+  |> rotate(axis = Z, angle = 180deg, global = true)
+  |> translate(
+       x = frontPanelWidth / 2 - (cornerBracketLeg / 2),
+       y = rearPanelCenterY - (panelThickness / 2),
+       z = basePlateThickness + cornerBracketHeight / 2,
+       global = true,
+     )
+leftCornerBracket = clone(frontCornerBracket)
+  |> rotate(axis = Z, angle = 90deg, global = true)
+  |> translate(x = 18mm, y = 18mm, global = true)
+rightCornerBracket = clone(frontCornerBracket)
+  |> rotate(axis = Z, angle = -90deg, global = true)
+  |> translate(x = -18mm, y = 18mm, global = true)
+
+export robotChassisAssembly = flatten([
+  assemblyLowerDeck,
+  assemblyUpperPlate,
+  assemblyTopCover,
+  assemblyFrontPanel,
+  assemblyRearPanel,
+  lowerPostLeftFront,
+  lowerPostRightFront,
+  lowerPostLeftMidFront,
+  lowerPostRightMidFront,
+  lowerPostLeftMidRear,
+  lowerPostRightMidRear,
+  lowerPostLeftRear,
+  lowerPostRightRear,
+  upperPostLeftFront,
+  upperPostRightFront,
+  upperPostLeftMidFront,
+  upperPostRightMidFront,
+  upperPostLeftMidRear,
+  upperPostRightMidRear,
+  upperPostLeftRear,
+  upperPostRightRear,
+  centerUltrasonicInsert,
+  leftUltrasonicInsert,
+  rightUltrasonicInsert,
+  frontCameraInsert,
+  frontCornerBracket,
+  rearCornerBracket,
+  leftCornerBracket,
+  rightCornerBracket
+])
+
+robotChassisAssembly

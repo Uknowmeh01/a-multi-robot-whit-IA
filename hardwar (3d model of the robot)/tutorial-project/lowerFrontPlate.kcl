@@ -1,0 +1,459 @@
+// Lower chassis front section
+// Printable rounded half-plate with integrated splice tabs, symmetric front motor reserves, wheel clearance, vents, and routing slots.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+
+frontPlateSketch = sketch(on = XY) {
+  frontLower = line(start = [var -90mm, var -70mm], end = [var 90mm, var -70mm])
+  frontRightArc = arc(start = [var 90mm, var -70mm], end = [var 100mm, var -60mm], center = [var 90mm, var -60mm])
+  rightSide = line(start = [var 100mm, var -60mm], end = [var 100mm, var 70mm])
+  rightShoulder = line(start = [var 100mm, var 70mm], end = [var 72mm, var 70mm])
+  rightTabOuter = line(start = [var 72mm, var 70mm], end = [var 72mm, var 77.6mm])
+  rightTabTop = line(start = [var 72mm, var 77.6mm], end = [var 48mm, var 77.6mm])
+  rightTabInner = line(start = [var 48mm, var 77.6mm], end = [var 48mm, var 70mm])
+  rightGap = line(start = [var 48mm, var 70mm], end = [var 12mm, var 70mm])
+  centerTabRight = line(start = [var 12mm, var 70mm], end = [var 12mm, var 77.6mm])
+  centerTabTop = line(start = [var 12mm, var 77.6mm], end = [var -12mm, var 77.6mm])
+  centerTabLeft = line(start = [var -12mm, var 77.6mm], end = [var -12mm, var 70mm])
+  leftGap = line(start = [var -12mm, var 70mm], end = [var -48mm, var 70mm])
+  leftTabInner = line(start = [var -48mm, var 70mm], end = [var -48mm, var 77.6mm])
+  leftTabTop = line(start = [var -48mm, var 77.6mm], end = [var -72mm, var 77.6mm])
+  leftTabOuter = line(start = [var -72mm, var 77.6mm], end = [var -72mm, var 70mm])
+  leftShoulder = line(start = [var -72mm, var 70mm], end = [var -100mm, var 70mm])
+  leftSide = line(start = [var -100mm, var 70mm], end = [var -100mm, var -60mm])
+  frontLeftArc = arc(start = [var -100mm, var -60mm], end = [var -90mm, var -70mm], center = [var -90mm, var -60mm])
+
+  leftWheelBottom = line(start = [var -99mm, var -43mm], end = [var -87mm, var -43mm])
+  leftWheelRight = line(start = [var -87mm, var -43mm], end = [var -87mm, var 13mm])
+  leftWheelTop = line(start = [var -87mm, var 13mm], end = [var -99mm, var 13mm])
+  leftWheelLeft = line(start = [var -99mm, var 13mm], end = [var -99mm, var -43mm])
+  rightWheelBottom = line(start = [var 87mm, var -43mm], end = [var 99mm, var -43mm])
+  rightWheelRight = line(start = [var 99mm, var -43mm], end = [var 99mm, var 13mm])
+  rightWheelTop = line(start = [var 99mm, var 13mm], end = [var 87mm, var 13mm])
+  rightWheelLeft = line(start = [var 87mm, var 13mm], end = [var 87mm, var -43mm])
+  leftCableBottom = line(start = [var -44mm, var -26mm], end = [var -32mm, var -26mm])
+  leftCableRight = line(start = [var -32mm, var -26mm], end = [var -32mm, var -4mm])
+  leftCableTop = line(start = [var -32mm, var -4mm], end = [var -44mm, var -4mm])
+  leftCableLeft = line(start = [var -44mm, var -4mm], end = [var -44mm, var -26mm])
+  rightCableBottom = line(start = [var 32mm, var -26mm], end = [var 44mm, var -26mm])
+  rightCableRight = line(start = [var 44mm, var -26mm], end = [var 44mm, var -4mm])
+  rightCableTop = line(start = [var 44mm, var -4mm], end = [var 32mm, var -4mm])
+  rightCableLeft = line(start = [var 32mm, var -4mm], end = [var 32mm, var -26mm])
+  ventLeftBottom = line(start = [var -55mm, var -55mm], end = [var -15mm, var -55mm])
+  ventLeftRight = line(start = [var -15mm, var -55mm], end = [var -15mm, var -50mm])
+  ventLeftTop = line(start = [var -15mm, var -50mm], end = [var -55mm, var -50mm])
+  ventLeftLeft = line(start = [var -55mm, var -50mm], end = [var -55mm, var -55mm])
+  ventRightBottom = line(start = [var 15mm, var -55mm], end = [var 55mm, var -55mm])
+  ventRightRight = line(start = [var 55mm, var -55mm], end = [var 55mm, var -50mm])
+  ventRightTop = line(start = [var 55mm, var -50mm], end = [var 15mm, var -50mm])
+  ventRightLeft = line(start = [var 15mm, var -50mm], end = [var 15mm, var -55mm])
+
+  leftMotorHole1 = circle(start = [var -82.3mm, var -27mm], center = [var -84mm, var -27mm])
+  leftMotorHole2 = circle(start = [var -50.3mm, var -27mm], center = [var -52mm, var -27mm])
+  leftMotorHole3 = circle(start = [var -82.3mm, var -3mm], center = [var -84mm, var -3mm])
+  leftMotorHole4 = circle(start = [var -50.3mm, var -3mm], center = [var -52mm, var -3mm])
+  rightMotorHole1 = circle(start = [var 53.7mm, var -27mm], center = [var 52mm, var -27mm])
+  rightMotorHole2 = circle(start = [var 85.7mm, var -27mm], center = [var 84mm, var -27mm])
+  rightMotorHole3 = circle(start = [var 53.7mm, var -3mm], center = [var 52mm, var -3mm])
+  rightMotorHole4 = circle(start = [var 85.7mm, var -3mm], center = [var 84mm, var -3mm])
+  spacerHole1 = circle(start = [var -84.3mm, var 40mm], center = [var -86mm, var 40mm])
+  spacerHole2 = circle(start = [var 87.7mm, var 40mm], center = [var 86mm, var 40mm])
+  spacerHole3 = circle(start = [var -84.3mm, var 62mm], center = [var -86mm, var 62mm])
+  spacerHole4 = circle(start = [var 87.7mm, var 62mm], center = [var 86mm, var 62mm])
+  jointHoleLeft = circle(start = [var -58.3mm, var 73.5mm], center = [var -60mm, var 73.5mm])
+  jointHoleCenter = circle(start = [var 1.7mm, var 73.5mm], center = [var 0mm, var 73.5mm])
+  jointHoleRight = circle(start = [var 61.7mm, var 73.5mm], center = [var 60mm, var 73.5mm])
+
+  coincident([frontLower.end, frontRightArc.start])
+  coincident([frontRightArc.end, rightSide.start])
+  coincident([rightSide.end, rightShoulder.start])
+  coincident([rightShoulder.end, rightTabOuter.start])
+  coincident([rightTabOuter.end, rightTabTop.start])
+  coincident([rightTabTop.end, rightTabInner.start])
+  coincident([rightTabInner.end, rightGap.start])
+  coincident([rightGap.end, centerTabRight.start])
+  coincident([centerTabRight.end, centerTabTop.start])
+  coincident([centerTabTop.end, centerTabLeft.start])
+  coincident([centerTabLeft.end, leftGap.start])
+  coincident([leftGap.end, leftTabInner.start])
+  coincident([leftTabInner.end, leftTabTop.start])
+  coincident([leftTabTop.end, leftTabOuter.start])
+  coincident([leftTabOuter.end, leftShoulder.start])
+  coincident([leftShoulder.end, leftSide.start])
+  coincident([leftSide.end, frontLeftArc.start])
+  coincident([frontLeftArc.end, frontLower.start])
+  horizontal(frontLower)
+  vertical(rightSide)
+  horizontal(rightShoulder)
+  vertical(rightTabOuter)
+  horizontal(rightTabTop)
+  vertical(rightTabInner)
+  horizontal(rightGap)
+  vertical(centerTabRight)
+  horizontal(centerTabTop)
+  vertical(centerTabLeft)
+  horizontal(leftGap)
+  vertical(leftTabInner)
+  horizontal(leftTabTop)
+  vertical(leftTabOuter)
+  horizontal(leftShoulder)
+  vertical(leftSide)
+  vertical([
+    frontRightArc.start,
+    frontRightArc.center
+  ])
+  horizontal([
+    frontRightArc.center,
+    frontRightArc.end
+  ])
+  horizontal([
+    frontLeftArc.start,
+    frontLeftArc.center
+  ])
+  vertical([frontLeftArc.center, frontLeftArc.end])
+  horizontalDistance([ORIGIN, frontLower.start]) == -chassisWidth / 2 + cornerRadius
+  verticalDistance([ORIGIN, frontLower.start]) == -splitSectionLength / 2
+  distance([frontLower.start, frontLower.end]) == chassisWidth - (2 * cornerRadius)
+  verticalDistance([rightSide.start, rightSide.end]) == splitSectionLength - cornerRadius
+  distance([rightShoulder.start, rightShoulder.end]) == 28mm
+  verticalDistance([rightTabOuter.start, rightTabOuter.end]) == jointTabDepth
+  distance([rightTabTop.start, rightTabTop.end]) == jointTabWidth
+  verticalDistance([rightTabInner.start, rightTabInner.end]) == -jointTabDepth
+  distance([rightGap.start, rightGap.end]) == 36mm
+  verticalDistance([
+  centerTabRight.start,
+  centerTabRight.end
+]) == jointTabDepth
+  distance([centerTabTop.start, centerTabTop.end]) == jointTabWidth
+  verticalDistance([centerTabLeft.start, centerTabLeft.end]) == -jointTabDepth
+  distance([leftGap.start, leftGap.end]) == 36mm
+  verticalDistance([leftTabInner.start, leftTabInner.end]) == jointTabDepth
+  distance([leftTabTop.start, leftTabTop.end]) == jointTabWidth
+  verticalDistance([leftTabOuter.start, leftTabOuter.end]) == -jointTabDepth
+  distance([leftShoulder.start, leftShoulder.end]) == 28mm
+  equalLength([rightSide, leftSide])
+  radius(frontRightArc) == cornerRadius
+  radius(frontLeftArc) == cornerRadius
+
+  coincident([
+    leftWheelBottom.end,
+    leftWheelRight.start
+  ])
+  coincident([leftWheelRight.end, leftWheelTop.start])
+  coincident([leftWheelTop.end, leftWheelLeft.start])
+  coincident([
+    leftWheelLeft.end,
+    leftWheelBottom.start
+  ])
+  horizontal(leftWheelBottom)
+  vertical(leftWheelRight)
+  horizontal(leftWheelTop)
+  vertical(leftWheelLeft)
+  horizontalDistance([ORIGIN, leftWheelBottom.start]) == -99mm
+  verticalDistance([ORIGIN, leftWheelBottom.start]) == -43mm
+  distance([
+  leftWheelBottom.start,
+  leftWheelBottom.end
+]) == 12mm
+  verticalDistance([
+  leftWheelRight.start,
+  leftWheelRight.end
+]) == 56mm
+  coincident([
+    rightWheelBottom.end,
+    rightWheelRight.start
+  ])
+  coincident([
+    rightWheelRight.end,
+    rightWheelTop.start
+  ])
+  coincident([
+    rightWheelTop.end,
+    rightWheelLeft.start
+  ])
+  coincident([
+    rightWheelLeft.end,
+    rightWheelBottom.start
+  ])
+  horizontal(rightWheelBottom)
+  vertical(rightWheelRight)
+  horizontal(rightWheelTop)
+  vertical(rightWheelLeft)
+  horizontalDistance([ORIGIN, rightWheelBottom.start]) == 87mm
+  verticalDistance([ORIGIN, rightWheelBottom.start]) == -43mm
+  distance([
+  rightWheelBottom.start,
+  rightWheelBottom.end
+]) == 12mm
+  verticalDistance([
+  rightWheelRight.start,
+  rightWheelRight.end
+]) == 56mm
+  coincident([
+    leftCableBottom.end,
+    leftCableRight.start
+  ])
+  coincident([leftCableRight.end, leftCableTop.start])
+  coincident([leftCableTop.end, leftCableLeft.start])
+  coincident([
+    leftCableLeft.end,
+    leftCableBottom.start
+  ])
+  horizontal(leftCableBottom)
+  vertical(leftCableRight)
+  horizontal(leftCableTop)
+  vertical(leftCableLeft)
+  horizontalDistance([ORIGIN, leftCableBottom.start]) == -44mm
+  verticalDistance([ORIGIN, leftCableBottom.start]) == -26mm
+  distance([
+  leftCableBottom.start,
+  leftCableBottom.end
+]) == 12mm
+  verticalDistance([
+  leftCableRight.start,
+  leftCableRight.end
+]) == 22mm
+  coincident([
+    rightCableBottom.end,
+    rightCableRight.start
+  ])
+  coincident([
+    rightCableRight.end,
+    rightCableTop.start
+  ])
+  coincident([
+    rightCableTop.end,
+    rightCableLeft.start
+  ])
+  coincident([
+    rightCableLeft.end,
+    rightCableBottom.start
+  ])
+  horizontal(rightCableBottom)
+  vertical(rightCableRight)
+  horizontal(rightCableTop)
+  vertical(rightCableLeft)
+  horizontalDistance([ORIGIN, rightCableBottom.start]) == 32mm
+  verticalDistance([ORIGIN, rightCableBottom.start]) == -26mm
+  distance([
+  rightCableBottom.start,
+  rightCableBottom.end
+]) == 12mm
+  verticalDistance([
+  rightCableRight.start,
+  rightCableRight.end
+]) == 22mm
+  coincident([
+    ventLeftBottom.end,
+    ventLeftRight.start
+  ])
+  coincident([ventLeftRight.end, ventLeftTop.start])
+  coincident([ventLeftTop.end, ventLeftLeft.start])
+  coincident([ventLeftLeft.end, ventLeftBottom.start])
+  horizontal(ventLeftBottom)
+  vertical(ventLeftRight)
+  horizontal(ventLeftTop)
+  vertical(ventLeftLeft)
+  horizontalDistance([ORIGIN, ventLeftBottom.start]) == -55mm
+  verticalDistance([ORIGIN, ventLeftBottom.start]) == -55mm
+  distance([
+  ventLeftBottom.start,
+  ventLeftBottom.end
+]) == 40mm
+  verticalDistance([ventLeftRight.start, ventLeftRight.end]) == 5mm
+  coincident([
+    ventRightBottom.end,
+    ventRightRight.start
+  ])
+  coincident([ventRightRight.end, ventRightTop.start])
+  coincident([ventRightTop.end, ventRightLeft.start])
+  coincident([
+    ventRightLeft.end,
+    ventRightBottom.start
+  ])
+  horizontal(ventRightBottom)
+  vertical(ventRightRight)
+  horizontal(ventRightTop)
+  vertical(ventRightLeft)
+  horizontalDistance([ORIGIN, ventRightBottom.start]) == 15mm
+  verticalDistance([ORIGIN, ventRightBottom.start]) == -55mm
+  distance([
+  ventRightBottom.start,
+  ventRightBottom.end
+]) == 40mm
+  verticalDistance([
+  ventRightRight.start,
+  ventRightRight.end
+]) == 5mm
+
+  horizontal([
+    leftMotorHole1.center,
+    leftMotorHole1.start
+  ])
+  horizontal([
+    leftMotorHole2.center,
+    leftMotorHole2.start
+  ])
+  horizontal([
+    leftMotorHole3.center,
+    leftMotorHole3.start
+  ])
+  horizontal([
+    leftMotorHole4.center,
+    leftMotorHole4.start
+  ])
+  horizontal([
+    rightMotorHole1.center,
+    rightMotorHole1.start
+  ])
+  horizontal([
+    rightMotorHole2.center,
+    rightMotorHole2.start
+  ])
+  horizontal([
+    rightMotorHole3.center,
+    rightMotorHole3.start
+  ])
+  horizontal([
+    rightMotorHole4.center,
+    rightMotorHole4.start
+  ])
+  horizontal([spacerHole1.center, spacerHole1.start])
+  horizontal([spacerHole2.center, spacerHole2.start])
+  horizontal([spacerHole3.center, spacerHole3.start])
+  horizontal([spacerHole4.center, spacerHole4.start])
+  horizontal([
+    jointHoleLeft.center,
+    jointHoleLeft.start
+  ])
+  horizontal([
+    jointHoleCenter.center,
+    jointHoleCenter.start
+  ])
+  horizontal([
+    jointHoleRight.center,
+    jointHoleRight.start
+  ])
+  horizontalDistance([ORIGIN, leftMotorHole1.center]) == -84mm
+  verticalDistance([ORIGIN, leftMotorHole1.center]) == -27mm
+  diameter(leftMotorHole1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMotorHole2.center]) == -52mm
+  verticalDistance([ORIGIN, leftMotorHole2.center]) == -27mm
+  diameter(leftMotorHole2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMotorHole3.center]) == -84mm
+  verticalDistance([ORIGIN, leftMotorHole3.center]) == -3mm
+  diameter(leftMotorHole3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMotorHole4.center]) == -52mm
+  verticalDistance([ORIGIN, leftMotorHole4.center]) == -3mm
+  diameter(leftMotorHole4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMotorHole1.center]) == 52mm
+  verticalDistance([ORIGIN, rightMotorHole1.center]) == -27mm
+  diameter(rightMotorHole1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMotorHole2.center]) == 84mm
+  verticalDistance([ORIGIN, rightMotorHole2.center]) == -27mm
+  diameter(rightMotorHole2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMotorHole3.center]) == 52mm
+  verticalDistance([ORIGIN, rightMotorHole3.center]) == -3mm
+  diameter(rightMotorHole3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMotorHole4.center]) == 84mm
+  verticalDistance([ORIGIN, rightMotorHole4.center]) == -3mm
+  diameter(rightMotorHole4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, spacerHole1.center]) == -86mm
+  verticalDistance([ORIGIN, spacerHole1.center]) == 40mm
+  diameter(spacerHole1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, spacerHole2.center]) == 86mm
+  verticalDistance([ORIGIN, spacerHole2.center]) == 40mm
+  diameter(spacerHole2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, spacerHole3.center]) == -86mm
+  verticalDistance([ORIGIN, spacerHole3.center]) == 62mm
+  diameter(spacerHole3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, spacerHole4.center]) == 86mm
+  verticalDistance([ORIGIN, spacerHole4.center]) == 62mm
+  diameter(spacerHole4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, jointHoleLeft.center]) == -60mm
+  verticalDistance([ORIGIN, jointHoleLeft.center]) == 73.5mm
+  diameter(jointHoleLeft) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, jointHoleCenter.center]) == 0mm
+  verticalDistance([ORIGIN, jointHoleCenter.center]) == 73.5mm
+  diameter(jointHoleCenter) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, jointHoleRight.center]) == 60mm
+  verticalDistance([ORIGIN, jointHoleRight.center]) == 73.5mm
+  diameter(jointHoleRight) == m3ClearanceDiameter
+}
+
+frontPlateRegion = region(point = [0mm, 50mm], sketch = frontPlateSketch)
+frontPlateBase = extrude(frontPlateRegion, length = basePlateThickness)
+
+frontPocketSketch = sketch(on = faceOf(frontPlateBase, face = END)) {
+  leftMotorBottom = line(start = [var -94mm, var -34mm], end = [var -48mm, var -34mm])
+  leftMotorRight = line(start = [var -48mm, var -34mm], end = [var -48mm, var 2mm])
+  leftMotorTop = line(start = [var -48mm, var 2mm], end = [var -94mm, var 2mm])
+  leftMotorLeft = line(start = [var -94mm, var 2mm], end = [var -94mm, var -34mm])
+  rightMotorBottom = line(start = [var 48mm, var -34mm], end = [var 94mm, var -34mm])
+  rightMotorRight = line(start = [var 94mm, var -34mm], end = [var 94mm, var 2mm])
+  rightMotorTop = line(start = [var 94mm, var 2mm], end = [var 48mm, var 2mm])
+  rightMotorLeft = line(start = [var 48mm, var 2mm], end = [var 48mm, var -34mm])
+  coincident([
+    leftMotorBottom.end,
+    leftMotorRight.start
+  ])
+  coincident([leftMotorRight.end, leftMotorTop.start])
+  coincident([leftMotorTop.end, leftMotorLeft.start])
+  coincident([
+    leftMotorLeft.end,
+    leftMotorBottom.start
+  ])
+  horizontal(leftMotorBottom)
+  vertical(leftMotorRight)
+  horizontal(leftMotorTop)
+  vertical(leftMotorLeft)
+  horizontalDistance([ORIGIN, leftMotorBottom.start]) == -94mm
+  verticalDistance([ORIGIN, leftMotorBottom.start]) == -34mm
+  distance([
+  leftMotorBottom.start,
+  leftMotorBottom.end
+]) == 46mm
+  verticalDistance([
+  leftMotorRight.start,
+  leftMotorRight.end
+]) == 36mm
+  coincident([
+    rightMotorBottom.end,
+    rightMotorRight.start
+  ])
+  coincident([
+    rightMotorRight.end,
+    rightMotorTop.start
+  ])
+  coincident([
+    rightMotorTop.end,
+    rightMotorLeft.start
+  ])
+  coincident([
+    rightMotorLeft.end,
+    rightMotorBottom.start
+  ])
+  horizontal(rightMotorBottom)
+  vertical(rightMotorRight)
+  horizontal(rightMotorTop)
+  vertical(rightMotorLeft)
+  horizontalDistance([ORIGIN, rightMotorBottom.start]) == 48mm
+  verticalDistance([ORIGIN, rightMotorBottom.start]) == -34mm
+  distance([
+  rightMotorBottom.start,
+  rightMotorBottom.end
+]) == 46mm
+  verticalDistance([
+  rightMotorRight.start,
+  rightMotorRight.end
+]) == 36mm
+}
+leftMotorRegion = region(point = [-70mm, -15mm], sketch = frontPocketSketch)
+rightMotorRegion = region(point = [70mm, -15mm], sketch = frontPocketSketch)
+export lowerFrontPlate = extrude([leftMotorRegion, rightMotorRegion], length = -zoneRecessDepth)
+  |> appearance(color = "#d89b32", roughness = 62, metalness = 0)
+
+hide(frontPlateSketch)
+hide(frontPocketSketch)
+lowerFrontPlate

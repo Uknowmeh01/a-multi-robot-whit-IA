@@ -1,0 +1,118 @@
+// Universal ultrasonic sensor insert
+// Reusable removable plate for center and 35-degree side sensor positions.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+
+insertWidth = 64mm
+insertHeight = 40mm
+insertCornerRadius = 4mm
+
+insertSketch = sketch(on = XY) {
+  bottom = line(start = [var -28mm, var -20mm], end = [var 28mm, var -20mm])
+  bottomRightArc = arc(start = [var 28mm, var -20mm], end = [var 32mm, var -16mm], center = [var 28mm, var -16mm])
+  right = line(start = [var 32mm, var -16mm], end = [var 32mm, var 16mm])
+  topRightArc = arc(start = [var 32mm, var 16mm], end = [var 28mm, var 20mm], center = [var 28mm, var 16mm])
+  top = line(start = [var 28mm, var 20mm], end = [var -28mm, var 20mm])
+  topLeftArc = arc(start = [var -28mm, var 20mm], end = [var -32mm, var 16mm], center = [var -28mm, var 16mm])
+  left = line(start = [var -32mm, var 16mm], end = [var -32mm, var -16mm])
+  bottomLeftArc = arc(start = [var -32mm, var -16mm], end = [var -28mm, var -20mm], center = [var -28mm, var -16mm])
+  coincident([bottom.end, bottomRightArc.start])
+  coincident([bottomRightArc.end, right.start])
+  coincident([right.end, topRightArc.start])
+  coincident([topRightArc.end, top.start])
+  coincident([top.end, topLeftArc.start])
+  coincident([topLeftArc.end, left.start])
+  coincident([left.end, bottomLeftArc.start])
+  coincident([bottomLeftArc.end, bottom.start])
+  horizontal(bottom)
+  vertical(right)
+  horizontal(top)
+  vertical(left)
+  vertical([
+    bottomRightArc.start,
+    bottomRightArc.center
+  ])
+  horizontal([
+    bottomRightArc.center,
+    bottomRightArc.end
+  ])
+  horizontal([topRightArc.start, topRightArc.center])
+  vertical([topRightArc.center, topRightArc.end])
+  vertical([topLeftArc.start, topLeftArc.center])
+  horizontal([topLeftArc.center, topLeftArc.end])
+  horizontal([
+    bottomLeftArc.start,
+    bottomLeftArc.center
+  ])
+  vertical([
+    bottomLeftArc.center,
+    bottomLeftArc.end
+  ])
+  horizontalDistance([ORIGIN, bottom.start]) == -insertWidth / 2 + insertCornerRadius
+  verticalDistance([ORIGIN, bottom.start]) == -insertHeight / 2
+  distance([bottom.start, bottom.end]) == insertWidth - (2 * insertCornerRadius)
+  verticalDistance([right.start, right.end]) == insertHeight - (2 * insertCornerRadius)
+  equalLength([bottom, top])
+  equalLength([right, left])
+  radius(bottomRightArc) == insertCornerRadius
+  radius(topRightArc) == insertCornerRadius
+  radius(topLeftArc) == insertCornerRadius
+  radius(bottomLeftArc) == insertCornerRadius
+}
+
+insertBase = extrude(region(point = [0mm, 0mm], sketch = insertSketch), length = panelThickness, symmetric = true)
+
+insertCutSketch = sketch(on = XY) {
+  sensorOpening = circle(start = [var 13mm, var 0mm], center = [var 0mm, var 0mm])
+  mount1 = circle(start = [var -25.3mm, var -14mm], center = [var -27mm, var -14mm])
+  mount2 = circle(start = [var 28.7mm, var -14mm], center = [var 27mm, var -14mm])
+  mount3 = circle(start = [var -25.3mm, var 14mm], center = [var -27mm, var 14mm])
+  mount4 = circle(start = [var 28.7mm, var 14mm], center = [var 27mm, var 14mm])
+  coincident([sensorOpening.center, ORIGIN])
+  horizontal([
+    sensorOpening.center,
+    sensorOpening.start
+  ])
+  diameter(sensorOpening) == 26mm
+  horizontal([mount1.center, mount1.start])
+  horizontal([mount2.center, mount2.start])
+  horizontal([mount3.center, mount3.start])
+  horizontal([mount4.center, mount4.start])
+  horizontalDistance([ORIGIN, mount1.center]) == -27mm
+  verticalDistance([ORIGIN, mount1.center]) == -14mm
+  diameter(mount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount2.center]) == 27mm
+  verticalDistance([ORIGIN, mount2.center]) == -14mm
+  diameter(mount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount3.center]) == -27mm
+  verticalDistance([ORIGIN, mount3.center]) == 14mm
+  diameter(mount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount4.center]) == 27mm
+  verticalDistance([ORIGIN, mount4.center]) == 14mm
+  diameter(mount4) == m3ClearanceDiameter
+}
+
+sensorRegion = region(point = [0mm, 0mm], sketch = insertCutSketch)
+mountRegion1 = region(point = [-27mm, -14mm], sketch = insertCutSketch)
+mountRegion2 = region(point = [27mm, -14mm], sketch = insertCutSketch)
+mountRegion3 = region(point = [-27mm, 14mm], sketch = insertCutSketch)
+mountRegion4 = region(point = [27mm, 14mm], sketch = insertCutSketch)
+insertCutters = extrude(
+  [
+    sensorRegion,
+    mountRegion1,
+    mountRegion2,
+    mountRegion3,
+    mountRegion4
+  ],
+  length = 10mm,
+  symmetric = true,
+)
+
+export ultrasonicInsert = subtract(insertBase, tools = insertCutters)
+  |> appearance(color = "#6f9bae", roughness = 58, metalness = 0)
+
+hide(insertSketch)
+hide(insertCutSketch)
+ultrasonicInsert

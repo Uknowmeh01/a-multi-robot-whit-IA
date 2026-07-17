@@ -1,0 +1,27 @@
+// Centered unit box primitive
+// Solver-backed 1 mm cube for printable features and subtraction cutters.
+@settings(defaultLengthUnit = mm)
+
+unitBoxSketch = sketch(on = XY) {
+  lower = line(start = [var -0.5mm, var -0.5mm], end = [var 0.5mm, var -0.5mm])
+  right = line(start = [var 0.5mm, var -0.5mm], end = [var 0.5mm, var 0.5mm])
+  upper = line(start = [var 0.5mm, var 0.5mm], end = [var -0.5mm, var 0.5mm])
+  left = line(start = [var -0.5mm, var 0.5mm], end = [var -0.5mm, var -0.5mm])
+
+  coincident([lower.end, right.start])
+  coincident([right.end, upper.start])
+  coincident([upper.end, left.start])
+  coincident([left.end, lower.start])
+  horizontal(lower)
+  vertical(right)
+  horizontal(upper)
+  vertical(left)
+  horizontalDistance([ORIGIN, lower.start]) == -0.5mm
+  verticalDistance([ORIGIN, lower.start]) == -0.5mm
+  horizontalDistance([lower.start, lower.end]) == 1mm
+  verticalDistance([right.start, right.end]) == 1mm
+}
+
+unitBoxRegion = region(point = [0mm, 0mm], sketch = unitBoxSketch)
+export unitBoxExport = extrude(unitBoxRegion, length = 1mm, symmetric = true)
+hide(unitBoxSketch)

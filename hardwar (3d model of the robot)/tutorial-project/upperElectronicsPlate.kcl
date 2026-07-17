@@ -1,0 +1,787 @@
+// Upper electronics mounting plate
+// Removable rounded plate with empty board zones, M3 patterns, airflow, cable access, and ESP32 antenna clearance.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import unitBoxExport from "unitBox.kcl"
+import unitCylinderExport from "unitCylinder.kcl"
+
+upperPlateSketch = sketch(on = XY) {
+  bottom = line(start = [var -90mm, var -100mm], end = [var 90mm, var -100mm])
+  bottomRightArc = arc(start = [var 90mm, var -100mm], end = [var 100mm, var -90mm], center = [var 90mm, var -90mm])
+  right = line(start = [var 100mm, var -90mm], end = [var 100mm, var 90mm])
+  topRightArc = arc(start = [var 100mm, var 90mm], end = [var 90mm, var 100mm], center = [var 90mm, var 90mm])
+  top = line(start = [var 90mm, var 100mm], end = [var -90mm, var 100mm])
+  topLeftArc = arc(start = [var -90mm, var 100mm], end = [var -100mm, var 90mm], center = [var -90mm, var 90mm])
+  left = line(start = [var -100mm, var 90mm], end = [var -100mm, var -90mm])
+  bottomLeftArc = arc(start = [var -100mm, var -90mm], end = [var -90mm, var -100mm], center = [var -90mm, var -90mm])
+  coincident([bottom.end, bottomRightArc.start])
+  coincident([bottomRightArc.end, right.start])
+  coincident([right.end, topRightArc.start])
+  coincident([topRightArc.end, top.start])
+  coincident([top.end, topLeftArc.start])
+  coincident([topLeftArc.end, left.start])
+  coincident([left.end, bottomLeftArc.start])
+  coincident([bottomLeftArc.end, bottom.start])
+  horizontal(bottom)
+  vertical(right)
+  horizontal(top)
+  vertical(left)
+  vertical([
+    bottomRightArc.start,
+    bottomRightArc.center
+  ])
+  horizontal([
+    bottomRightArc.center,
+    bottomRightArc.end
+  ])
+  horizontal([topRightArc.start, topRightArc.center])
+  vertical([topRightArc.center, topRightArc.end])
+  vertical([topLeftArc.start, topLeftArc.center])
+  horizontal([topLeftArc.center, topLeftArc.end])
+  horizontal([
+    bottomLeftArc.start,
+    bottomLeftArc.center
+  ])
+  vertical([
+    bottomLeftArc.center,
+    bottomLeftArc.end
+  ])
+  horizontalDistance([ORIGIN, bottom.start]) == -chassisWidth / 2 + cornerRadius
+  verticalDistance([ORIGIN, bottom.start]) == -chassisWidth / 2
+  distance([bottom.start, bottom.end]) == chassisWidth - (2 * cornerRadius)
+  verticalDistance([right.start, right.end]) == chassisWidth - (2 * cornerRadius)
+  equalLength([bottom, top])
+  equalLength([right, left])
+  radius(bottomRightArc) == cornerRadius
+  radius(topRightArc) == cornerRadius
+  radius(topLeftArc) == cornerRadius
+  radius(bottomLeftArc) == cornerRadius
+}
+
+upperPlateBase = extrude(region(point = [0mm, 0mm], sketch = upperPlateSketch), length = upperPlateThickness)
+
+piZone = clone(unitBoxExport)
+  |> scale(
+       x = 90,
+       y = 60,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -45mm,
+       y = -40mm,
+       z = 4.4mm,
+       global = true,
+     )
+esp32Zone = clone(unitBoxExport)
+  |> scale(
+       x = 56,
+       y = 30,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = -45mm,
+       z = 4.4mm,
+       global = true,
+     )
+cameraCableZone = clone(unitBoxExport)
+  |> scale(
+       x = 30,
+       y = 18,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 15mm,
+       y = -4mm,
+       z = 4.4mm,
+       global = true,
+     )
+logicConverterZone = clone(unitBoxExport)
+  |> scale(
+       x = 36,
+       y = 22,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 8mm,
+       y = 25mm,
+       z = 4.4mm,
+       global = true,
+     )
+prototypeZone = clone(unitBoxExport)
+  |> scale(
+       x = 58,
+       y = 38,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = 50mm,
+       z = 4.4mm,
+       global = true,
+     )
+powerConverterZone = clone(unitBoxExport)
+  |> scale(
+       x = 44,
+       y = 26,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = 70mm,
+       z = 4.4mm,
+       global = true,
+     )
+fanZone = clone(unitBoxExport)
+  |> scale(
+       x = 46,
+       y = 46,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 62mm,
+       y = 50mm,
+       z = 4.4mm,
+       global = true,
+     )
+
+upperPlateWithZones = subtract(
+  upperPlateBase,
+  tools = [
+    piZone,
+    esp32Zone,
+    cameraCableZone,
+    logicConverterZone,
+    prototypeZone,
+    powerConverterZone,
+    fanZone
+  ],
+)
+
+esp32AntennaOpening = clone(unitBoxExport)
+  |> scale(
+       x = 48,
+       y = 16,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = -94mm,
+       z = 2mm,
+       global = true,
+     )
+piUsbOpening = clone(unitBoxExport)
+  |> scale(
+       x = 12,
+       y = 48,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -96mm,
+       y = -40mm,
+       z = 2mm,
+       global = true,
+     )
+piPowerOpening = clone(unitBoxExport)
+  |> scale(
+       x = 50,
+       y = 12,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -45mm,
+       y = -82mm,
+       z = 2mm,
+       global = true,
+     )
+piGpioOpening = clone(unitBoxExport)
+  |> scale(
+       x = 8,
+       y = 48,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 5mm,
+       y = -40mm,
+       z = 2mm,
+       global = true,
+     )
+piMicroSdOpening = clone(unitBoxExport)
+  |> scale(
+       x = 24,
+       y = 10,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -45mm,
+       y = -4mm,
+       z = 2mm,
+       global = true,
+     )
+espProgrammingOpening = clone(unitBoxExport)
+  |> scale(
+       x = 20,
+       y = 10,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = -70mm,
+       z = 2mm,
+       global = true,
+     )
+cameraWiringOpening = clone(unitBoxExport)
+  |> scale(
+       x = 14,
+       y = 8,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 15mm,
+       y = -4mm,
+       z = 2mm,
+       global = true,
+     )
+centralWiringOpening = clone(unitBoxExport)
+  |> scale(
+       x = 24,
+       y = 8,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 15mm,
+       y = 10mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot1 = clone(unitBoxExport)
+  |> scale(
+       x = 26,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -60mm,
+       y = 88mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot2 = clone(unitBoxExport)
+  |> scale(
+       x = 26,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -20mm,
+       y = 88mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot3 = clone(unitBoxExport)
+  |> scale(
+       x = 26,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 20mm,
+       y = 88mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot4 = clone(unitBoxExport)
+  |> scale(
+       x = 26,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = 88mm,
+       z = 2mm,
+       global = true,
+     )
+fanOpening = clone(unitCylinderExport)
+  |> scale(
+       x = 38,
+       y = 38,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 62mm,
+       y = 50mm,
+       z = 2mm,
+       global = true,
+     )
+
+upperPlateWithOpenings = subtract(
+  upperPlateWithZones,
+  tools = [
+    esp32AntennaOpening,
+    piUsbOpening,
+    piPowerOpening,
+    piGpioOpening,
+    piMicroSdOpening,
+    espProgrammingOpening,
+    cameraWiringOpening,
+    centralWiringOpening,
+    ventSlot1,
+    ventSlot2,
+    ventSlot3,
+    ventSlot4,
+    fanOpening
+  ],
+)
+
+piHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -74mm,
+       y = -64.5mm,
+       z = 2mm,
+       global = true,
+     )
+piHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -16mm,
+       y = -64.5mm,
+       z = 2mm,
+       global = true,
+     )
+piHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -74mm,
+       y = -15.5mm,
+       z = 2mm,
+       global = true,
+     )
+piHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -16mm,
+       y = -15.5mm,
+       z = 2mm,
+       global = true,
+     )
+espHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 40mm,
+       y = -56mm,
+       z = 2mm,
+       global = true,
+     )
+espHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = -56mm,
+       z = 2mm,
+       global = true,
+     )
+espHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 40mm,
+       y = -34mm,
+       z = 2mm,
+       global = true,
+     )
+espHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = -34mm,
+       z = 2mm,
+       global = true,
+     )
+cameraCableHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = -4mm,
+       z = 2mm,
+       global = true,
+     )
+cameraCableHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 30mm,
+       y = -4mm,
+       z = 2mm,
+       global = true,
+     )
+logicHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -8mm,
+       y = 28mm,
+       z = 2mm,
+       global = true,
+     )
+logicHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 24mm,
+       y = 28mm,
+       z = 2mm,
+       global = true,
+     )
+prototypeHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -78mm,
+       y = 38mm,
+       z = 2mm,
+       global = true,
+     )
+prototypeHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -32mm,
+       y = 38mm,
+       z = 2mm,
+       global = true,
+     )
+prototypeHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -78mm,
+       y = 62mm,
+       z = 2mm,
+       global = true,
+     )
+prototypeHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -32mm,
+       y = 62mm,
+       z = 2mm,
+       global = true,
+     )
+powerHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -15mm,
+       y = 70mm,
+       z = 2mm,
+       global = true,
+     )
+powerHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 15mm,
+       y = 70mm,
+       z = 2mm,
+       global = true,
+     )
+fanHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 46mm,
+       y = 34mm,
+       z = 2mm,
+       global = true,
+     )
+fanHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 78mm,
+       y = 34mm,
+       z = 2mm,
+       global = true,
+     )
+fanHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 46mm,
+       y = 66mm,
+       z = 2mm,
+       global = true,
+     )
+fanHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 78mm,
+       y = 66mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = -82mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = -82mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = -25mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = -25mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole5 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = 25mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole6 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = 25mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole7 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = 82mm,
+       z = 2mm,
+       global = true,
+     )
+spacerHole8 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = 82mm,
+       z = 2mm,
+       global = true,
+     )
+
+export upperElectronicsPlate = subtract(
+  upperPlateWithOpenings,
+  tools = [
+    piHole1,
+    piHole2,
+    piHole3,
+    piHole4,
+    espHole1,
+    espHole2,
+    espHole3,
+    espHole4,
+    cameraCableHole1,
+    cameraCableHole2,
+    logicHole1,
+    logicHole2,
+    prototypeHole1,
+    prototypeHole2,
+    prototypeHole3,
+    prototypeHole4,
+    powerHole1,
+    powerHole2,
+    fanHole1,
+    fanHole2,
+    fanHole3,
+    fanHole4,
+    spacerHole1,
+    spacerHole2,
+    spacerHole3,
+    spacerHole4,
+    spacerHole5,
+    spacerHole6,
+    spacerHole7,
+    spacerHole8
+  ],
+)
+  |> appearance(color = "#4b88a8", roughness = 58, metalness = 0)
+
+hide(upperPlateSketch)
+upperElectronicsPlate

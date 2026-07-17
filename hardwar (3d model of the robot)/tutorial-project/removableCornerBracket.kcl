@@ -1,0 +1,41 @@
+// Removable chassis corner bracket
+// Printable L-bracket with M3 clearance holes and nut-relief counterbores.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import unitBoxExport from "unitBox.kcl"
+import unitCylinderExport from "unitCylinder.kcl"
+
+bracketBase = clone(unitBoxExport)
+  |> scale(x = cornerBracketLeg / 1mm, y = cornerBracketLeg / 1mm, z = cornerBracketThickness / 1mm, global = true)
+
+bracketUpright = clone(unitBoxExport)
+  |> scale(x = cornerBracketLeg / 1mm, y = cornerBracketThickness / 1mm, z = cornerBracketHeight / 1mm, global = true)
+  |> translate(y = -(cornerBracketLeg / 2 - cornerBracketThickness / 2), z = cornerBracketHeight / 2, global = true)
+
+baseHoleLeft = clone(unitCylinderExport)
+  |> scale(x = m3ClearanceDiameter / 1mm, y = m3ClearanceDiameter / 1mm, z = 10, global = true)
+  |> translate(x = -cornerBracketMountSpacing / 2, y = 0mm, z = 0mm, global = true)
+baseHoleRight = clone(unitCylinderExport)
+  |> scale(x = m3ClearanceDiameter / 1mm, y = m3ClearanceDiameter / 1mm, z = 10, global = true)
+  |> translate(x = cornerBracketMountSpacing / 2, y = 0mm, z = 0mm, global = true)
+baseReliefLeft = clone(unitCylinderExport)
+  |> scale(x = m3NutReliefDiameter / 1mm, y = m3NutReliefDiameter / 1mm, z = m3NutReliefDepth / 1mm, global = true)
+  |> translate(x = -cornerBracketMountSpacing / 2, y = 0mm, z = cornerBracketThickness / 2, global = true)
+baseReliefRight = clone(unitCylinderExport)
+  |> scale(x = m3NutReliefDiameter / 1mm, y = m3NutReliefDiameter / 1mm, z = m3NutReliefDepth / 1mm, global = true)
+  |> translate(x = cornerBracketMountSpacing / 2, y = 0mm, z = cornerBracketThickness / 2, global = true)
+
+uprightHoleLeft = clone(unitCylinderExport)
+  |> scale(x = m3ClearanceDiameter / 1mm, y = m3ClearanceDiameter / 1mm, z = 10, global = true)
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(x = -cornerBracketMountSpacing / 2, y = -(cornerBracketLeg / 2 - cornerBracketThickness / 2), z = cornerBracketHeight / 2, global = true)
+uprightHoleRight = clone(unitCylinderExport)
+  |> scale(x = m3ClearanceDiameter / 1mm, y = m3ClearanceDiameter / 1mm, z = 10, global = true)
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(x = cornerBracketMountSpacing / 2, y = -(cornerBracketLeg / 2 - cornerBracketThickness / 2), z = cornerBracketHeight / 2, global = true)
+
+bracketBaseCut = subtract(bracketBase, tools = [baseHoleLeft, baseHoleRight, baseReliefLeft, baseReliefRight])
+bracketUprightCut = subtract(bracketUpright, tools = [uprightHoleLeft, uprightHoleRight])
+
+export removableCornerBracket = flatten([bracketBaseCut, bracketUprightCut])

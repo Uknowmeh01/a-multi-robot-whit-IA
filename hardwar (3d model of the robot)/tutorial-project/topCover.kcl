@@ -1,0 +1,675 @@
+// Removable top cover
+// Rounded cover with separated light sensing, isolated microphone ventilation, status indicators, buzzer, and airflow.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import unitBoxExport from "unitBox.kcl"
+import unitCylinderExport from "unitCylinder.kcl"
+
+topCoverSketch = sketch(on = XY) {
+  bottom = line(start = [var -90mm, var -100mm], end = [var 90mm, var -100mm])
+  bottomRightArc = arc(start = [var 90mm, var -100mm], end = [var 100mm, var -90mm], center = [var 90mm, var -90mm])
+  right = line(start = [var 100mm, var -90mm], end = [var 100mm, var 90mm])
+  topRightArc = arc(start = [var 100mm, var 90mm], end = [var 90mm, var 100mm], center = [var 90mm, var 90mm])
+  top = line(start = [var 90mm, var 100mm], end = [var -90mm, var 100mm])
+  topLeftArc = arc(start = [var -90mm, var 100mm], end = [var -100mm, var 90mm], center = [var -90mm, var 90mm])
+  left = line(start = [var -100mm, var 90mm], end = [var -100mm, var -90mm])
+  bottomLeftArc = arc(start = [var -100mm, var -90mm], end = [var -90mm, var -100mm], center = [var -90mm, var -90mm])
+  coincident([bottom.end, bottomRightArc.start])
+  coincident([bottomRightArc.end, right.start])
+  coincident([right.end, topRightArc.start])
+  coincident([topRightArc.end, top.start])
+  coincident([top.end, topLeftArc.start])
+  coincident([topLeftArc.end, left.start])
+  coincident([left.end, bottomLeftArc.start])
+  coincident([bottomLeftArc.end, bottom.start])
+  horizontal(bottom)
+  vertical(right)
+  horizontal(top)
+  vertical(left)
+  vertical([
+    bottomRightArc.start,
+    bottomRightArc.center
+  ])
+  horizontal([
+    bottomRightArc.center,
+    bottomRightArc.end
+  ])
+  horizontal([topRightArc.start, topRightArc.center])
+  vertical([topRightArc.center, topRightArc.end])
+  vertical([topLeftArc.start, topLeftArc.center])
+  horizontal([topLeftArc.center, topLeftArc.end])
+  horizontal([
+    bottomLeftArc.start,
+    bottomLeftArc.center
+  ])
+  vertical([
+    bottomLeftArc.center,
+    bottomLeftArc.end
+  ])
+  horizontalDistance([ORIGIN, bottom.start]) == -chassisWidth / 2 + cornerRadius
+  verticalDistance([ORIGIN, bottom.start]) == -chassisWidth / 2
+  distance([bottom.start, bottom.end]) == chassisWidth - (2 * cornerRadius)
+  verticalDistance([right.start, right.end]) == chassisWidth - (2 * cornerRadius)
+  equalLength([bottom, top])
+  equalLength([right, left])
+  radius(bottomRightArc) == cornerRadius
+  radius(topRightArc) == cornerRadius
+  radius(topLeftArc) == cornerRadius
+  radius(bottomLeftArc) == cornerRadius
+}
+
+topCoverBase = extrude(region(point = [0mm, 0mm], sketch = topCoverSketch), length = topCoverThickness)
+
+lightFrameFront = clone(unitBoxExport)
+  |> scale(
+       x = 40,
+       y = 3,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = -63.5mm,
+       z = 4.4mm,
+       global = true,
+     )
+lightFrameRear = clone(unitBoxExport)
+  |> scale(
+       x = 40,
+       y = 3,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = -26.5mm,
+       z = 4.4mm,
+       global = true,
+     )
+lightFrameLeft = clone(unitBoxExport)
+  |> scale(
+       x = 3,
+       y = 33.6,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -73.5mm,
+       y = -45mm,
+       z = 4.4mm,
+       global = true,
+     )
+lightFrameRight = clone(unitBoxExport)
+  |> scale(
+       x = 3,
+       y = 33.6,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -36.5mm,
+       y = -45mm,
+       z = 4.4mm,
+       global = true,
+     )
+
+topCoverMarked = subtract(
+  topCoverBase,
+  tools = [
+    lightFrameFront,
+    lightFrameRear,
+    lightFrameLeft,
+    lightFrameRight
+  ],
+)
+
+ventSlot1 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -62mm,
+       y = 0mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot2 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -21mm,
+       y = 0mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot3 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 21mm,
+       y = 0mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot4 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 62mm,
+       y = 0mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot5 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -62mm,
+       y = 18mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot6 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -21mm,
+       y = 18mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot7 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 21mm,
+       y = 18mm,
+       z = 2mm,
+       global = true,
+     )
+ventSlot8 = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 62mm,
+       y = 18mm,
+       z = 2mm,
+       global = true,
+     )
+lightSensorOpening = clone(unitCylinderExport)
+  |> scale(
+       x = 12,
+       y = 12,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+micVentCenter = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 35mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+micVentLeft = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 30mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+micVentRight = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 40mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+micVentFront = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 35mm,
+       y = -50mm,
+       z = 2mm,
+       global = true,
+     )
+micVentRear = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 35mm,
+       y = -40mm,
+       z = 2mm,
+       global = true,
+     )
+micVentFrontLeft = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 31.5mm,
+       y = -48.5mm,
+       z = 2mm,
+       global = true,
+     )
+micVentRearRight = clone(unitCylinderExport)
+  |> scale(
+       x = 2.2,
+       y = 2.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 38.5mm,
+       y = -41.5mm,
+       z = 2mm,
+       global = true,
+     )
+statusLed1 = clone(unitCylinderExport)
+  |> scale(
+       x = 5,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+statusLed2 = clone(unitCylinderExport)
+  |> scale(
+       x = 5,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+statusLed3 = clone(unitCylinderExport)
+  |> scale(
+       x = 5,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 75mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+buzzerOpening = clone(unitCylinderExport)
+  |> scale(
+       x = 24,
+       y = 24,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+
+coverWithOpenings = subtract(
+  topCoverMarked,
+  tools = [
+    ventSlot1,
+    ventSlot2,
+    ventSlot3,
+    ventSlot4,
+    ventSlot5,
+    ventSlot6,
+    ventSlot7,
+    ventSlot8,
+    lightSensorOpening,
+    micVentCenter,
+    micVentLeft,
+    micVentRight,
+    micVentFront,
+    micVentRear,
+    micVentFrontLeft,
+    micVentRearRight,
+    statusLed1,
+    statusLed2,
+    statusLed3,
+    buzzerOpening
+  ],
+)
+
+lightMountHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -66mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+lightMountHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -44mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+micIsolationHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = 4.2,
+       y = 4.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 25mm,
+       y = -55mm,
+       z = 2mm,
+       global = true,
+     )
+micIsolationHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = 4.2,
+       y = 4.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = -55mm,
+       z = 2mm,
+       global = true,
+     )
+micIsolationHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = 4.2,
+       y = 4.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 25mm,
+       y = -35mm,
+       z = 2mm,
+       global = true,
+     )
+micIsolationHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = 4.2,
+       y = 4.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = -35mm,
+       z = 2mm,
+       global = true,
+     )
+buzzerHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -73mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+buzzerHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -37mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+buzzerHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = 37mm,
+       z = 2mm,
+       global = true,
+     )
+buzzerHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -55mm,
+       y = 73mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = -82mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = -82mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = -25mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = -25mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole5 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = 25mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole6 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = 25mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole7 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = 82mm,
+       z = 2mm,
+       global = true,
+     )
+coverHole8 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = 82mm,
+       z = 2mm,
+       global = true,
+     )
+
+export topCover = subtract(
+  coverWithOpenings,
+  tools = [
+    lightMountHole1,
+    lightMountHole2,
+    micIsolationHole1,
+    micIsolationHole2,
+    micIsolationHole3,
+    micIsolationHole4,
+    buzzerHole1,
+    buzzerHole2,
+    buzzerHole3,
+    buzzerHole4,
+    coverHole1,
+    coverHole2,
+    coverHole3,
+    coverHole4,
+    coverHole5,
+    coverHole6,
+    coverHole7,
+    coverHole8
+  ],
+)
+  |> appearance(color = "#d7dadd", roughness = 52, metalness = 5)
+
+hide(topCoverSketch)
+topCover

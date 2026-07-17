@@ -1,0 +1,47 @@
+// Robot chassis shared parameters
+// Editable dimensions for the two-level printable mechanical assembly.
+@settings(defaultLengthUnit = mm)
+
+export chassisLength = 280mm
+export chassisWidth = 200mm
+export chassisMaxHeight = 148mm
+export splitSectionLength = chassisLength / 2
+export lowerDeckSectionOffset = 47.5mm
+export basePlateThickness = 4mm
+export upperPlateThickness = 4mm
+export topCoverThickness = 4mm
+export wallThickness = 3mm
+export panelThickness = 3mm
+export cornerRadius = 10mm
+export m3ClearanceDiameter = 3.4mm
+export m3NutReliefDiameter = 6.6mm
+export m3NutReliefDepth = 2.4mm
+export zoneRecessDepth = 0.6mm
+export lowerSpacerHeight = 66mm
+export upperSpacerHeight = 70mm
+export upperPlateZ = basePlateThickness + lowerSpacerHeight
+export topCoverZ = upperPlateZ + upperPlateThickness + upperSpacerHeight
+export spacerOuterDiameter = 8mm
+export frontPanelWidth = 196mm
+export frontPanelHeight = 90mm
+export rearPanelWidth = 196mm
+export rearPanelHeight = 55mm
+export jointTabWidth = 24mm
+export jointTabDepth = 7.6mm
+export jointTabThickness = 4mm
+
+export motorReserveLength = 46mm
+export motorReserveWidth = 36mm
+export motorHoleSpacingLength = 32mm
+export motorHoleSpacingWidth = 24mm
+export batteryReserveLength = 70mm
+export batteryReserveWidth = 72mm
+export batteryAccessLength = 42mm
+export batteryAccessWidth = 52mm
+export driverReserveLength = 36mm
+export driverReserveWidth = 22mm
+export cornerBracketLeg = 30mm
+export cornerBracketHeight = 40mm
+export cornerBracketThickness = 4mm
+export cornerBracketHoleInset = 7mm
+export cornerBracketMountSpacing = 16mm

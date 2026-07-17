@@ -1,0 +1,14 @@
+// Centered unit cylinder primitive
+// Solver-backed 1 mm diameter cylinder for holes and round supports.
+@settings(defaultLengthUnit = mm)
+
+unitCylinderSketch = sketch(on = XY) {
+  outer = circle(start = [var 0.5mm, var 0mm], center = [var 0mm, var 0mm])
+  coincident([outer.center, ORIGIN])
+  horizontal([outer.center, outer.start])
+  diameter(outer) == 1mm
+}
+
+unitCylinderRegion = region(point = [0mm, 0mm], sketch = unitCylinderSketch)
+export unitCylinderExport = extrude(unitCylinderRegion, length = 1mm, symmetric = true)
+hide(unitCylinderSketch)

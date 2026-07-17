@@ -1,0 +1,175 @@
+// Rear utility service panel
+// Removable print-flat panel with power switch, charging port, fuse access, cable clearance, and M3 fasteners.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+
+rearCornerRadius = 8mm
+
+rearPanelSketch = sketch(on = XY) {
+  bottom = line(start = [var -90mm, var -27.5mm], end = [var 90mm, var -27.5mm])
+  bottomRightArc = arc(start = [var 90mm, var -27.5mm], end = [var 98mm, var -19.5mm], center = [var 90mm, var -19.5mm])
+  right = line(start = [var 98mm, var -19.5mm], end = [var 98mm, var 19.5mm])
+  topRightArc = arc(start = [var 98mm, var 19.5mm], end = [var 90mm, var 27.5mm], center = [var 90mm, var 19.5mm])
+  top = line(start = [var 90mm, var 27.5mm], end = [var -90mm, var 27.5mm])
+  topLeftArc = arc(start = [var -90mm, var 27.5mm], end = [var -98mm, var 19.5mm], center = [var -90mm, var 19.5mm])
+  left = line(start = [var -98mm, var 19.5mm], end = [var -98mm, var -19.5mm])
+  bottomLeftArc = arc(start = [var -98mm, var -19.5mm], end = [var -90mm, var -27.5mm], center = [var -90mm, var -19.5mm])
+  coincident([bottom.end, bottomRightArc.start])
+  coincident([bottomRightArc.end, right.start])
+  coincident([right.end, topRightArc.start])
+  coincident([topRightArc.end, top.start])
+  coincident([top.end, topLeftArc.start])
+  coincident([topLeftArc.end, left.start])
+  coincident([left.end, bottomLeftArc.start])
+  coincident([bottomLeftArc.end, bottom.start])
+  horizontal(bottom)
+  vertical(right)
+  horizontal(top)
+  vertical(left)
+  vertical([
+    bottomRightArc.start,
+    bottomRightArc.center
+  ])
+  horizontal([
+    bottomRightArc.center,
+    bottomRightArc.end
+  ])
+  horizontal([topRightArc.start, topRightArc.center])
+  vertical([topRightArc.center, topRightArc.end])
+  vertical([topLeftArc.start, topLeftArc.center])
+  horizontal([topLeftArc.center, topLeftArc.end])
+  horizontal([
+    bottomLeftArc.start,
+    bottomLeftArc.center
+  ])
+  vertical([
+    bottomLeftArc.center,
+    bottomLeftArc.end
+  ])
+  horizontalDistance([ORIGIN, bottom.start]) == -rearPanelWidth / 2 + rearCornerRadius
+  verticalDistance([ORIGIN, bottom.start]) == -rearPanelHeight / 2
+  distance([bottom.start, bottom.end]) == rearPanelWidth - (2 * rearCornerRadius)
+  verticalDistance([right.start, right.end]) == rearPanelHeight - (2 * rearCornerRadius)
+  equalLength([bottom, top])
+  equalLength([right, left])
+  radius(bottomRightArc) == rearCornerRadius
+  radius(topRightArc) == rearCornerRadius
+  radius(topLeftArc) == rearCornerRadius
+  radius(bottomLeftArc) == rearCornerRadius
+}
+
+rearPanelBase = extrude(region(point = [0mm, 0mm], sketch = rearPanelSketch), length = panelThickness, symmetric = true)
+
+rearCutSketch = sketch(on = XY) {
+  fuseBottom = line(start = [var -66mm, var -7mm], end = [var -34mm, var -7mm])
+  fuseRight = line(start = [var -34mm, var -7mm], end = [var -34mm, var 7mm])
+  fuseTop = line(start = [var -34mm, var 7mm], end = [var -66mm, var 7mm])
+  fuseLeft = line(start = [var -66mm, var 7mm], end = [var -66mm, var -7mm])
+  chargeBottom = line(start = [var -10mm, var -7mm], end = [var 10mm, var -7mm])
+  chargeRight = line(start = [var 10mm, var -7mm], end = [var 10mm, var 7mm])
+  chargeTop = line(start = [var 10mm, var 7mm], end = [var -10mm, var 7mm])
+  chargeLeft = line(start = [var -10mm, var 7mm], end = [var -10mm, var -7mm])
+  switchBottom = line(start = [var 44mm, var -7mm], end = [var 66mm, var -7mm])
+  switchRight = line(start = [var 66mm, var -7mm], end = [var 66mm, var 7mm])
+  switchTop = line(start = [var 66mm, var 7mm], end = [var 44mm, var 7mm])
+  switchLeft = line(start = [var 44mm, var 7mm], end = [var 44mm, var -7mm])
+  cableOpening = circle(start = [var 87mm, var 0mm], center = [var 80mm, var 0mm])
+  mount1 = circle(start = [var -86.3mm, var -18mm], center = [var -88mm, var -18mm])
+  mount2 = circle(start = [var 89.7mm, var -18mm], center = [var 88mm, var -18mm])
+  mount3 = circle(start = [var -86.3mm, var 18mm], center = [var -88mm, var 18mm])
+  mount4 = circle(start = [var 89.7mm, var 18mm], center = [var 88mm, var 18mm])
+
+  coincident([fuseBottom.end, fuseRight.start])
+  coincident([fuseRight.end, fuseTop.start])
+  coincident([fuseTop.end, fuseLeft.start])
+  coincident([fuseLeft.end, fuseBottom.start])
+  horizontal(fuseBottom)
+  vertical(fuseRight)
+  horizontal(fuseTop)
+  vertical(fuseLeft)
+  horizontalDistance([ORIGIN, fuseBottom.start]) == -66mm
+  verticalDistance([ORIGIN, fuseBottom.start]) == -7mm
+  distance([fuseBottom.start, fuseBottom.end]) == 32mm
+  verticalDistance([fuseRight.start, fuseRight.end]) == 14mm
+
+  coincident([chargeBottom.end, chargeRight.start])
+  coincident([chargeRight.end, chargeTop.start])
+  coincident([chargeTop.end, chargeLeft.start])
+  coincident([chargeLeft.end, chargeBottom.start])
+  horizontal(chargeBottom)
+  vertical(chargeRight)
+  horizontal(chargeTop)
+  vertical(chargeLeft)
+  horizontalDistance([ORIGIN, chargeBottom.start]) == -10mm
+  verticalDistance([ORIGIN, chargeBottom.start]) == -7mm
+  distance([chargeBottom.start, chargeBottom.end]) == 20mm
+  verticalDistance([chargeRight.start, chargeRight.end]) == 14mm
+
+  coincident([switchBottom.end, switchRight.start])
+  coincident([switchRight.end, switchTop.start])
+  coincident([switchTop.end, switchLeft.start])
+  coincident([switchLeft.end, switchBottom.start])
+  horizontal(switchBottom)
+  vertical(switchRight)
+  horizontal(switchTop)
+  vertical(switchLeft)
+  horizontalDistance([ORIGIN, switchBottom.start]) == 44mm
+  verticalDistance([ORIGIN, switchBottom.start]) == -7mm
+  distance([switchBottom.start, switchBottom.end]) == 22mm
+  verticalDistance([switchRight.start, switchRight.end]) == 14mm
+
+  horizontal([
+    cableOpening.center,
+    cableOpening.start
+  ])
+  horizontalDistance([ORIGIN, cableOpening.center]) == 80mm
+  verticalDistance([ORIGIN, cableOpening.center]) == 0mm
+  diameter(cableOpening) == 14mm
+  horizontal([mount1.center, mount1.start])
+  horizontal([mount2.center, mount2.start])
+  horizontal([mount3.center, mount3.start])
+  horizontal([mount4.center, mount4.start])
+  horizontalDistance([ORIGIN, mount1.center]) == -88mm
+  verticalDistance([ORIGIN, mount1.center]) == -18mm
+  diameter(mount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount2.center]) == 88mm
+  verticalDistance([ORIGIN, mount2.center]) == -18mm
+  diameter(mount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount3.center]) == -88mm
+  verticalDistance([ORIGIN, mount3.center]) == 18mm
+  diameter(mount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount4.center]) == 88mm
+  verticalDistance([ORIGIN, mount4.center]) == 18mm
+  diameter(mount4) == m3ClearanceDiameter
+}
+
+fuseRegion = region(point = [-50mm, 0mm], sketch = rearCutSketch)
+chargeRegion = region(point = [0mm, 0mm], sketch = rearCutSketch)
+switchRegion = region(point = [55mm, 0mm], sketch = rearCutSketch)
+cableRegion = region(point = [80mm, 0mm], sketch = rearCutSketch)
+mountRegion1 = region(point = [-88mm, -18mm], sketch = rearCutSketch)
+mountRegion2 = region(point = [88mm, -18mm], sketch = rearCutSketch)
+mountRegion3 = region(point = [-88mm, 18mm], sketch = rearCutSketch)
+mountRegion4 = region(point = [88mm, 18mm], sketch = rearCutSketch)
+rearCutters = extrude(
+  [
+    fuseRegion,
+    chargeRegion,
+    switchRegion,
+    cableRegion,
+    mountRegion1,
+    mountRegion2,
+    mountRegion3,
+    mountRegion4
+  ],
+  length = 10mm,
+  symmetric = true,
+)
+
+export rearUtilityPanel = subtract(rearPanelBase, tools = rearCutters)
+  |> appearance(color = "#58646c", roughness = 56, metalness = 5)
+
+hide(rearPanelSketch)
+hide(rearCutSketch)
+rearUtilityPanel

@@ -1,0 +1,351 @@
+// Front sensor carrier panel
+// Print-flat removable frame with solver-defined sensor, camera, LED, wiring, and M3 through-openings.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+
+frontPanelSketch = sketch(on = XY) {
+  bottom = line(start = [var -88mm, var -45mm], end = [var 88mm, var -45mm])
+  bottomRightArc = arc(start = [var 88mm, var -45mm], end = [var 98mm, var -35mm], center = [var 88mm, var -35mm])
+  right = line(start = [var 98mm, var -35mm], end = [var 98mm, var 35mm])
+  topRightArc = arc(start = [var 98mm, var 35mm], end = [var 88mm, var 45mm], center = [var 88mm, var 35mm])
+  top = line(start = [var 88mm, var 45mm], end = [var -88mm, var 45mm])
+  topLeftArc = arc(start = [var -88mm, var 45mm], end = [var -98mm, var 35mm], center = [var -88mm, var 35mm])
+  left = line(start = [var -98mm, var 35mm], end = [var -98mm, var -35mm])
+  bottomLeftArc = arc(start = [var -98mm, var -35mm], end = [var -88mm, var -45mm], center = [var -88mm, var -35mm])
+
+  coincident([bottom.end, bottomRightArc.start])
+  coincident([bottomRightArc.end, right.start])
+  coincident([right.end, topRightArc.start])
+  coincident([topRightArc.end, top.start])
+  coincident([top.end, topLeftArc.start])
+  coincident([topLeftArc.end, left.start])
+  coincident([left.end, bottomLeftArc.start])
+  coincident([bottomLeftArc.end, bottom.start])
+  horizontal(bottom)
+  vertical(right)
+  horizontal(top)
+  vertical(left)
+  vertical([
+    bottomRightArc.start,
+    bottomRightArc.center
+  ])
+  horizontal([
+    bottomRightArc.center,
+    bottomRightArc.end
+  ])
+  horizontal([topRightArc.start, topRightArc.center])
+  vertical([topRightArc.center, topRightArc.end])
+  vertical([topLeftArc.start, topLeftArc.center])
+  horizontal([topLeftArc.center, topLeftArc.end])
+  horizontal([
+    bottomLeftArc.start,
+    bottomLeftArc.center
+  ])
+  vertical([
+    bottomLeftArc.center,
+    bottomLeftArc.end
+  ])
+  horizontalDistance([ORIGIN, bottom.start]) == -frontPanelWidth / 2 + cornerRadius
+  verticalDistance([ORIGIN, bottom.start]) == -frontPanelHeight / 2
+  distance([bottom.start, bottom.end]) == frontPanelWidth - (2 * cornerRadius)
+  verticalDistance([right.start, right.end]) == frontPanelHeight - (2 * cornerRadius)
+  equalLength([bottom, top])
+  equalLength([right, left])
+  radius(bottomRightArc) == cornerRadius
+  radius(topRightArc) == cornerRadius
+  radius(topLeftArc) == cornerRadius
+  radius(bottomLeftArc) == cornerRadius
+}
+
+frontPanelRegion = region(point = [0mm, 0mm], sketch = frontPanelSketch)
+frontPanelBase = extrude(frontPanelRegion, length = panelThickness, symmetric = true)
+
+frontCutSketch = sketch(on = XY) {
+  centerUltrasonic = circle(start = [var 16mm, var -12mm], center = [var 0mm, var -12mm])
+  leftUltrasonic = circle(start = [var -47mm, var -12mm], center = [var -62mm, var -12mm])
+  rightUltrasonic = circle(start = [var 77mm, var -12mm], center = [var 62mm, var -12mm])
+  cameraOpening = circle(start = [var 7mm, var 25mm], center = [var 0mm, var 25mm])
+  wiringLeft = circle(start = [var -18mm, var -35mm], center = [var -24mm, var -35mm])
+  wiringCenter = circle(start = [var 6mm, var -35mm], center = [var 0mm, var -35mm])
+  wiringRight = circle(start = [var 30mm, var -35mm], center = [var 24mm, var -35mm])
+  led1 = circle(start = [var -81.5mm, var 27mm], center = [var -84mm, var 27mm])
+  led2 = circle(start = [var -45.5mm, var 27mm], center = [var -48mm, var 27mm])
+  led3 = circle(start = [var 50.5mm, var 27mm], center = [var 48mm, var 27mm])
+  led4 = circle(start = [var 86.5mm, var 27mm], center = [var 84mm, var 27mm])
+  centerMount1 = circle(start = [var -25.3mm, var -26mm], center = [var -27mm, var -26mm])
+  centerMount2 = circle(start = [var 28.7mm, var -26mm], center = [var 27mm, var -26mm])
+  centerMount3 = circle(start = [var -25.3mm, var 2mm], center = [var -27mm, var 2mm])
+  centerMount4 = circle(start = [var 28.7mm, var 2mm], center = [var 27mm, var 2mm])
+  leftMount1 = circle(start = [var -87.3mm, var -26mm], center = [var -89mm, var -26mm])
+  leftMount2 = circle(start = [var -33.3mm, var -26mm], center = [var -35mm, var -26mm])
+  leftMount3 = circle(start = [var -87.3mm, var 2mm], center = [var -89mm, var 2mm])
+  leftMount4 = circle(start = [var -33.3mm, var 2mm], center = [var -35mm, var 2mm])
+  rightMount1 = circle(start = [var 36.7mm, var -26mm], center = [var 35mm, var -26mm])
+  rightMount2 = circle(start = [var 90.7mm, var -26mm], center = [var 89mm, var -26mm])
+  rightMount3 = circle(start = [var 36.7mm, var 2mm], center = [var 35mm, var 2mm])
+  rightMount4 = circle(start = [var 90.7mm, var 2mm], center = [var 89mm, var 2mm])
+  cameraMount1 = circle(start = [var -20.3mm, var 12mm], center = [var -22mm, var 12mm])
+  cameraMount2 = circle(start = [var 23.7mm, var 12mm], center = [var 22mm, var 12mm])
+  cameraMount3 = circle(start = [var -20.3mm, var 38mm], center = [var -22mm, var 38mm])
+  cameraMount4 = circle(start = [var 23.7mm, var 38mm], center = [var 22mm, var 38mm])
+  panelFastener1 = circle(start = [var -86.3mm, var -34mm], center = [var -88mm, var -34mm])
+  panelFastener2 = circle(start = [var 89.7mm, var -34mm], center = [var 88mm, var -34mm])
+  panelFastener3 = circle(start = [var -86.3mm, var 34mm], center = [var -88mm, var 34mm])
+  panelFastener4 = circle(start = [var 89.7mm, var 34mm], center = [var 88mm, var 34mm])
+
+  horizontal([
+    centerUltrasonic.center,
+    centerUltrasonic.start
+  ])
+  horizontal([
+    leftUltrasonic.center,
+    leftUltrasonic.start
+  ])
+  horizontal([
+    rightUltrasonic.center,
+    rightUltrasonic.start
+  ])
+  horizontal([
+    cameraOpening.center,
+    cameraOpening.start
+  ])
+  horizontal([wiringLeft.center, wiringLeft.start])
+  horizontal([
+    wiringCenter.center,
+    wiringCenter.start
+  ])
+  horizontal([wiringRight.center, wiringRight.start])
+  horizontal([led1.center, led1.start])
+  horizontal([led2.center, led2.start])
+  horizontal([led3.center, led3.start])
+  horizontal([led4.center, led4.start])
+  horizontal([
+    centerMount1.center,
+    centerMount1.start
+  ])
+  horizontal([
+    centerMount2.center,
+    centerMount2.start
+  ])
+  horizontal([
+    centerMount3.center,
+    centerMount3.start
+  ])
+  horizontal([
+    centerMount4.center,
+    centerMount4.start
+  ])
+  horizontal([leftMount1.center, leftMount1.start])
+  horizontal([leftMount2.center, leftMount2.start])
+  horizontal([leftMount3.center, leftMount3.start])
+  horizontal([leftMount4.center, leftMount4.start])
+  horizontal([rightMount1.center, rightMount1.start])
+  horizontal([rightMount2.center, rightMount2.start])
+  horizontal([rightMount3.center, rightMount3.start])
+  horizontal([rightMount4.center, rightMount4.start])
+  horizontal([
+    cameraMount1.center,
+    cameraMount1.start
+  ])
+  horizontal([
+    cameraMount2.center,
+    cameraMount2.start
+  ])
+  horizontal([
+    cameraMount3.center,
+    cameraMount3.start
+  ])
+  horizontal([
+    cameraMount4.center,
+    cameraMount4.start
+  ])
+  horizontal([
+    panelFastener1.center,
+    panelFastener1.start
+  ])
+  horizontal([
+    panelFastener2.center,
+    panelFastener2.start
+  ])
+  horizontal([
+    panelFastener3.center,
+    panelFastener3.start
+  ])
+  horizontal([
+    panelFastener4.center,
+    panelFastener4.start
+  ])
+
+  horizontalDistance([ORIGIN, centerUltrasonic.center]) == 0mm
+  verticalDistance([ORIGIN, centerUltrasonic.center]) == -12mm
+  diameter(centerUltrasonic) == 32mm
+  horizontalDistance([ORIGIN, leftUltrasonic.center]) == -62mm
+  verticalDistance([ORIGIN, leftUltrasonic.center]) == -12mm
+  diameter(leftUltrasonic) == 30mm
+  horizontalDistance([ORIGIN, rightUltrasonic.center]) == 62mm
+  verticalDistance([ORIGIN, rightUltrasonic.center]) == -12mm
+  diameter(rightUltrasonic) == 30mm
+  horizontalDistance([ORIGIN, cameraOpening.center]) == 0mm
+  verticalDistance([ORIGIN, cameraOpening.center]) == 25mm
+  diameter(cameraOpening) == 14mm
+  horizontalDistance([ORIGIN, wiringLeft.center]) == -24mm
+  verticalDistance([ORIGIN, wiringLeft.center]) == -35mm
+  diameter(wiringLeft) == 12mm
+  horizontalDistance([ORIGIN, wiringCenter.center]) == 0mm
+  verticalDistance([ORIGIN, wiringCenter.center]) == -35mm
+  diameter(wiringCenter) == 12mm
+  horizontalDistance([ORIGIN, wiringRight.center]) == 24mm
+  verticalDistance([ORIGIN, wiringRight.center]) == -35mm
+  diameter(wiringRight) == 12mm
+  horizontalDistance([ORIGIN, led1.center]) == -84mm
+  verticalDistance([ORIGIN, led1.center]) == 27mm
+  diameter(led1) == 5mm
+  horizontalDistance([ORIGIN, led2.center]) == -48mm
+  verticalDistance([ORIGIN, led2.center]) == 27mm
+  diameter(led2) == 5mm
+  horizontalDistance([ORIGIN, led3.center]) == 48mm
+  verticalDistance([ORIGIN, led3.center]) == 27mm
+  diameter(led3) == 5mm
+  horizontalDistance([ORIGIN, led4.center]) == 84mm
+  verticalDistance([ORIGIN, led4.center]) == 27mm
+  diameter(led4) == 5mm
+
+  horizontalDistance([ORIGIN, centerMount1.center]) == -27mm
+  verticalDistance([ORIGIN, centerMount1.center]) == -26mm
+  diameter(centerMount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, centerMount2.center]) == 27mm
+  verticalDistance([ORIGIN, centerMount2.center]) == -26mm
+  diameter(centerMount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, centerMount3.center]) == -27mm
+  verticalDistance([ORIGIN, centerMount3.center]) == 2mm
+  diameter(centerMount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, centerMount4.center]) == 27mm
+  verticalDistance([ORIGIN, centerMount4.center]) == 2mm
+  diameter(centerMount4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMount1.center]) == -89mm
+  verticalDistance([ORIGIN, leftMount1.center]) == -26mm
+  diameter(leftMount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMount2.center]) == -35mm
+  verticalDistance([ORIGIN, leftMount2.center]) == -26mm
+  diameter(leftMount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMount3.center]) == -89mm
+  verticalDistance([ORIGIN, leftMount3.center]) == 2mm
+  diameter(leftMount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, leftMount4.center]) == -35mm
+  verticalDistance([ORIGIN, leftMount4.center]) == 2mm
+  diameter(leftMount4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMount1.center]) == 35mm
+  verticalDistance([ORIGIN, rightMount1.center]) == -26mm
+  diameter(rightMount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMount2.center]) == 89mm
+  verticalDistance([ORIGIN, rightMount2.center]) == -26mm
+  diameter(rightMount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMount3.center]) == 35mm
+  verticalDistance([ORIGIN, rightMount3.center]) == 2mm
+  diameter(rightMount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, rightMount4.center]) == 89mm
+  verticalDistance([ORIGIN, rightMount4.center]) == 2mm
+  diameter(rightMount4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, cameraMount1.center]) == -22mm
+  verticalDistance([ORIGIN, cameraMount1.center]) == 12mm
+  diameter(cameraMount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, cameraMount2.center]) == 22mm
+  verticalDistance([ORIGIN, cameraMount2.center]) == 12mm
+  diameter(cameraMount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, cameraMount3.center]) == -22mm
+  verticalDistance([ORIGIN, cameraMount3.center]) == 38mm
+  diameter(cameraMount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, cameraMount4.center]) == 22mm
+  verticalDistance([ORIGIN, cameraMount4.center]) == 38mm
+  diameter(cameraMount4) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, panelFastener1.center]) == -88mm
+  verticalDistance([ORIGIN, panelFastener1.center]) == -34mm
+  diameter(panelFastener1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, panelFastener2.center]) == 88mm
+  verticalDistance([ORIGIN, panelFastener2.center]) == -34mm
+  diameter(panelFastener2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, panelFastener3.center]) == -88mm
+  verticalDistance([ORIGIN, panelFastener3.center]) == 34mm
+  diameter(panelFastener3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, panelFastener4.center]) == 88mm
+  verticalDistance([ORIGIN, panelFastener4.center]) == 34mm
+  diameter(panelFastener4) == m3ClearanceDiameter
+}
+
+centerUltrasonicRegion = region(point = [0mm, -12mm], sketch = frontCutSketch)
+leftUltrasonicRegion = region(point = [-62mm, -12mm], sketch = frontCutSketch)
+rightUltrasonicRegion = region(point = [62mm, -12mm], sketch = frontCutSketch)
+cameraRegion = region(point = [0mm, 25mm], sketch = frontCutSketch)
+wiringLeftRegion = region(point = [-24mm, -35mm], sketch = frontCutSketch)
+wiringCenterRegion = region(point = [0mm, -35mm], sketch = frontCutSketch)
+wiringRightRegion = region(point = [24mm, -35mm], sketch = frontCutSketch)
+ledRegion1 = region(point = [-84mm, 27mm], sketch = frontCutSketch)
+ledRegion2 = region(point = [-48mm, 27mm], sketch = frontCutSketch)
+ledRegion3 = region(point = [48mm, 27mm], sketch = frontCutSketch)
+ledRegion4 = region(point = [84mm, 27mm], sketch = frontCutSketch)
+centerMountRegion1 = region(point = [-27mm, -26mm], sketch = frontCutSketch)
+centerMountRegion2 = region(point = [27mm, -26mm], sketch = frontCutSketch)
+centerMountRegion3 = region(point = [-27mm, 2mm], sketch = frontCutSketch)
+centerMountRegion4 = region(point = [27mm, 2mm], sketch = frontCutSketch)
+leftMountRegion1 = region(point = [-89mm, -26mm], sketch = frontCutSketch)
+leftMountRegion2 = region(point = [-35mm, -26mm], sketch = frontCutSketch)
+leftMountRegion3 = region(point = [-89mm, 2mm], sketch = frontCutSketch)
+leftMountRegion4 = region(point = [-35mm, 2mm], sketch = frontCutSketch)
+rightMountRegion1 = region(point = [35mm, -26mm], sketch = frontCutSketch)
+rightMountRegion2 = region(point = [89mm, -26mm], sketch = frontCutSketch)
+rightMountRegion3 = region(point = [35mm, 2mm], sketch = frontCutSketch)
+rightMountRegion4 = region(point = [89mm, 2mm], sketch = frontCutSketch)
+cameraMountRegion1 = region(point = [-22mm, 12mm], sketch = frontCutSketch)
+cameraMountRegion2 = region(point = [22mm, 12mm], sketch = frontCutSketch)
+cameraMountRegion3 = region(point = [-22mm, 38mm], sketch = frontCutSketch)
+cameraMountRegion4 = region(point = [22mm, 38mm], sketch = frontCutSketch)
+panelFastenerRegion1 = region(point = [-88mm, -34mm], sketch = frontCutSketch)
+panelFastenerRegion2 = region(point = [88mm, -34mm], sketch = frontCutSketch)
+panelFastenerRegion3 = region(point = [-88mm, 34mm], sketch = frontCutSketch)
+panelFastenerRegion4 = region(point = [88mm, 34mm], sketch = frontCutSketch)
+
+frontCutters = extrude(
+  [
+    centerUltrasonicRegion,
+    leftUltrasonicRegion,
+    rightUltrasonicRegion,
+    cameraRegion,
+    wiringLeftRegion,
+    wiringCenterRegion,
+    wiringRightRegion,
+    ledRegion1,
+    ledRegion2,
+    ledRegion3,
+    ledRegion4,
+    centerMountRegion1,
+    centerMountRegion2,
+    centerMountRegion3,
+    centerMountRegion4,
+    leftMountRegion1,
+    leftMountRegion2,
+    leftMountRegion3,
+    leftMountRegion4,
+    rightMountRegion1,
+    rightMountRegion2,
+    rightMountRegion3,
+    rightMountRegion4,
+    cameraMountRegion1,
+    cameraMountRegion2,
+    cameraMountRegion3,
+    cameraMountRegion4,
+    panelFastenerRegion1,
+    panelFastenerRegion2,
+    panelFastenerRegion3,
+    panelFastenerRegion4
+  ],
+  length = 10mm,
+  symmetric = true,
+)
+
+export frontSensorPanel = subtract(frontPanelBase, tools = frontCutters)
+  |> appearance(color = "#3e6678", roughness = 58, metalness = 0)
+
+hide(frontPanelSketch)
+hide(frontCutSketch)
+frontSensorPanel

@@ -1,0 +1,128 @@
+// Removable camera insert
+// Compact print-flat plate with centered camera clearance, cable pass-through, and M3 mounting pattern.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+
+cameraInsertWidth = 54mm
+cameraInsertHeight = 38mm
+cameraInsertCornerRadius = 4mm
+
+cameraInsertSketch = sketch(on = XY) {
+  bottom = line(start = [var -23mm, var -19mm], end = [var 23mm, var -19mm])
+  bottomRightArc = arc(start = [var 23mm, var -19mm], end = [var 27mm, var -15mm], center = [var 23mm, var -15mm])
+  right = line(start = [var 27mm, var -15mm], end = [var 27mm, var 15mm])
+  topRightArc = arc(start = [var 27mm, var 15mm], end = [var 23mm, var 19mm], center = [var 23mm, var 15mm])
+  top = line(start = [var 23mm, var 19mm], end = [var -23mm, var 19mm])
+  topLeftArc = arc(start = [var -23mm, var 19mm], end = [var -27mm, var 15mm], center = [var -23mm, var 15mm])
+  left = line(start = [var -27mm, var 15mm], end = [var -27mm, var -15mm])
+  bottomLeftArc = arc(start = [var -27mm, var -15mm], end = [var -23mm, var -19mm], center = [var -23mm, var -15mm])
+  coincident([bottom.end, bottomRightArc.start])
+  coincident([bottomRightArc.end, right.start])
+  coincident([right.end, topRightArc.start])
+  coincident([topRightArc.end, top.start])
+  coincident([top.end, topLeftArc.start])
+  coincident([topLeftArc.end, left.start])
+  coincident([left.end, bottomLeftArc.start])
+  coincident([bottomLeftArc.end, bottom.start])
+  horizontal(bottom)
+  vertical(right)
+  horizontal(top)
+  vertical(left)
+  vertical([
+    bottomRightArc.start,
+    bottomRightArc.center
+  ])
+  horizontal([
+    bottomRightArc.center,
+    bottomRightArc.end
+  ])
+  horizontal([topRightArc.start, topRightArc.center])
+  vertical([topRightArc.center, topRightArc.end])
+  vertical([topLeftArc.start, topLeftArc.center])
+  horizontal([topLeftArc.center, topLeftArc.end])
+  horizontal([
+    bottomLeftArc.start,
+    bottomLeftArc.center
+  ])
+  vertical([
+    bottomLeftArc.center,
+    bottomLeftArc.end
+  ])
+  horizontalDistance([ORIGIN, bottom.start]) == -cameraInsertWidth / 2 + cameraInsertCornerRadius
+  verticalDistance([ORIGIN, bottom.start]) == -cameraInsertHeight / 2
+  distance([bottom.start, bottom.end]) == cameraInsertWidth - (2 * cameraInsertCornerRadius)
+  verticalDistance([right.start, right.end]) == cameraInsertHeight - (2 * cameraInsertCornerRadius)
+  equalLength([bottom, top])
+  equalLength([right, left])
+  radius(bottomRightArc) == cameraInsertCornerRadius
+  radius(topRightArc) == cameraInsertCornerRadius
+  radius(topLeftArc) == cameraInsertCornerRadius
+  radius(bottomLeftArc) == cameraInsertCornerRadius
+}
+
+cameraInsertBase = extrude(region(point = [0mm, 0mm], sketch = cameraInsertSketch), length = panelThickness, symmetric = true)
+
+cameraInsertCutSketch = sketch(on = XY) {
+  cameraOpening = circle(start = [var 7mm, var 0mm], center = [var 0mm, var 0mm])
+  cableOpening = circle(start = [var 4mm, var -12mm], center = [var 0mm, var -12mm])
+  mount1 = circle(start = [var -20.3mm, var -13mm], center = [var -22mm, var -13mm])
+  mount2 = circle(start = [var 23.7mm, var -13mm], center = [var 22mm, var -13mm])
+  mount3 = circle(start = [var -20.3mm, var 13mm], center = [var -22mm, var 13mm])
+  mount4 = circle(start = [var 23.7mm, var 13mm], center = [var 22mm, var 13mm])
+  coincident([cameraOpening.center, ORIGIN])
+  horizontal([
+    cameraOpening.center,
+    cameraOpening.start
+  ])
+  diameter(cameraOpening) == 14mm
+  horizontal([
+    cableOpening.center,
+    cableOpening.start
+  ])
+  horizontalDistance([ORIGIN, cableOpening.center]) == 0mm
+  verticalDistance([ORIGIN, cableOpening.center]) == -12mm
+  diameter(cableOpening) == 8mm
+  horizontal([mount1.center, mount1.start])
+  horizontal([mount2.center, mount2.start])
+  horizontal([mount3.center, mount3.start])
+  horizontal([mount4.center, mount4.start])
+  horizontalDistance([ORIGIN, mount1.center]) == -22mm
+  verticalDistance([ORIGIN, mount1.center]) == -13mm
+  diameter(mount1) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount2.center]) == 22mm
+  verticalDistance([ORIGIN, mount2.center]) == -13mm
+  diameter(mount2) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount3.center]) == -22mm
+  verticalDistance([ORIGIN, mount3.center]) == 13mm
+  diameter(mount3) == m3ClearanceDiameter
+  horizontalDistance([ORIGIN, mount4.center]) == 22mm
+  verticalDistance([ORIGIN, mount4.center]) == 13mm
+  diameter(mount4) == m3ClearanceDiameter
+}
+
+cameraRegion = region(point = [0mm, 0mm], sketch = cameraInsertCutSketch)
+cableRegion = region(point = [0mm, -12mm], sketch = cameraInsertCutSketch)
+mountRegion1 = region(point = [-22mm, -13mm], sketch = cameraInsertCutSketch)
+mountRegion2 = region(point = [22mm, -13mm], sketch = cameraInsertCutSketch)
+mountRegion3 = region(point = [-22mm, 13mm], sketch = cameraInsertCutSketch)
+mountRegion4 = region(point = [22mm, 13mm], sketch = cameraInsertCutSketch)
+cameraCutters = extrude(
+  [
+    cameraRegion,
+    cableRegion,
+    mountRegion1,
+    mountRegion2,
+    mountRegion3,
+    mountRegion4
+  ],
+  length = 10mm,
+  symmetric = true,
+)
+
+export cameraInsert = subtract(cameraInsertBase, tools = cameraCutters)
+  |> appearance(color = "#8cb4c4", roughness = 58, metalness = 0)
+
+hide(cameraInsertSketch)
+hide(cameraInsertCutSketch)
+cameraInsert

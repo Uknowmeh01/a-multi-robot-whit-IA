@@ -1,0 +1,1113 @@
+// Lower chassis rear printable section
+// Rounded rear half with motor, battery, driver, power, routing, ventilation, splice, and spacer provisions.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import unitBoxExport from "unitBox.kcl"
+import unitCylinderExport from "unitCylinder.kcl"
+
+zoneCutterCenterZ = basePlateThickness + 1mm - zoneRecessDepth
+
+rearPlateSketch = sketch(on = XY) {
+  spliceEdge = line(start = [var -100mm, var -70mm], end = [var 100mm, var -70mm])
+  rightSide = line(start = [var 100mm, var -70mm], end = [var 100mm, var 60mm])
+  rearRightArc = arc(start = [var 100mm, var 60mm], end = [var 90mm, var 70mm], center = [var 90mm, var 60mm])
+  rearUpper = line(start = [var 90mm, var 70mm], end = [var -90mm, var 70mm])
+  rearLeftArc = arc(start = [var -90mm, var 70mm], end = [var -100mm, var 60mm], center = [var -90mm, var 60mm])
+  leftSide = line(start = [var -100mm, var 60mm], end = [var -100mm, var -70mm])
+
+  coincident([spliceEdge.end, rightSide.start])
+  coincident([rightSide.end, rearRightArc.start])
+  coincident([rearRightArc.end, rearUpper.start])
+  coincident([rearUpper.end, rearLeftArc.start])
+  coincident([rearLeftArc.end, leftSide.start])
+  coincident([leftSide.end, spliceEdge.start])
+  horizontal(spliceEdge)
+  vertical(rightSide)
+  horizontal(rearUpper)
+  vertical(leftSide)
+  horizontal([
+    rearRightArc.start,
+    rearRightArc.center
+  ])
+  vertical([rearRightArc.center, rearRightArc.end])
+  vertical([rearLeftArc.start, rearLeftArc.center])
+  horizontal([rearLeftArc.center, rearLeftArc.end])
+  horizontalDistance([ORIGIN, spliceEdge.start]) == -chassisWidth / 2
+  verticalDistance([ORIGIN, spliceEdge.start]) == -splitSectionLength / 2
+  distance([spliceEdge.start, spliceEdge.end]) == chassisWidth
+  verticalDistance([rightSide.start, rightSide.end]) == splitSectionLength - cornerRadius
+  equalLength([rightSide, leftSide])
+  radius(rearRightArc) == cornerRadius
+  radius(rearLeftArc) == cornerRadius
+}
+
+rearPlateBase = extrude(region(point = [0mm, 0mm], sketch = rearPlateSketch), length = basePlateThickness)
+
+rearLeftMotorZone = clone(unitBoxExport)
+  |> scale(
+       x = 46,
+       y = 36,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -68mm,
+       y = 20mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+rearRightMotorZone = clone(unitBoxExport)
+  |> scale(
+       x = 46,
+       y = 36,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 68mm,
+       y = 20mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+batteryReserveZone = clone(unitBoxExport)
+  |> scale(
+       x = 70,
+       y = 72,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = -25mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+leftDriverReserveZone = clone(unitBoxExport)
+  |> scale(
+       x = 36,
+       y = 22,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -45mm,
+       y = 52mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+rightDriverReserveZone = clone(unitBoxExport)
+  |> scale(
+       x = 36,
+       y = 22,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = 52mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+voltageConverterReserveZone = clone(unitBoxExport)
+  |> scale(
+       x = 28,
+       y = 22,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = -74mm,
+       y = -48mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+fuseReserveZone = clone(unitBoxExport)
+  |> scale(
+       x = 20,
+       y = 14,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 74mm,
+       y = -50mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+powerSwitchReserveZone = clone(unitBoxExport)
+  |> scale(
+       x = 24,
+       y = 16,
+       z = 2,
+       global = true,
+     )
+  |> translate(
+       x = 74mm,
+       y = -28mm,
+       z = zoneCutterCenterZ,
+       global = true,
+     )
+
+leftWheelClearance = clone(unitBoxExport)
+  |> scale(
+       x = 18,
+       y = 58,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -96mm,
+       y = 20mm,
+       z = 2mm,
+       global = true,
+     )
+rightWheelClearance = clone(unitBoxExport)
+  |> scale(
+       x = 18,
+       y = 58,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 96mm,
+       y = 20mm,
+       z = 2mm,
+       global = true,
+     )
+leftMotorCableSlot = clone(unitBoxExport)
+  |> scale(
+       x = 14,
+       y = 22,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -38mm,
+       y = 20mm,
+       z = 2mm,
+       global = true,
+     )
+rightMotorCableSlot = clone(unitBoxExport)
+  |> scale(
+       x = 14,
+       y = 22,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 38mm,
+       y = 20mm,
+       z = 2mm,
+       global = true,
+     )
+centerCableSlotFront = clone(unitBoxExport)
+  |> scale(
+       x = 12,
+       y = 18,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = 24mm,
+       z = 2mm,
+       global = true,
+     )
+centerCableSlotRear = clone(unitBoxExport)
+  |> scale(
+       x = 12,
+       y = 18,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = 48mm,
+       z = 2mm,
+       global = true,
+     )
+leftDriverCableSlot = clone(unitBoxExport)
+  |> scale(
+       x = 24,
+       y = 6,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -24mm,
+       y = 36mm,
+       z = 2mm,
+       global = true,
+     )
+rightDriverCableSlot = clone(unitBoxExport)
+  |> scale(
+       x = 24,
+       y = 6,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 24mm,
+       y = 36mm,
+       z = 2mm,
+       global = true,
+     )
+batteryAccessOpening = clone(unitBoxExport)
+  |> scale(
+       x = 42,
+       y = 52,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = -25mm,
+       z = 2mm,
+       global = true,
+     )
+strapSlotLeftFront = clone(unitBoxExport)
+  |> scale(
+       x = 6,
+       y = 30,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -44mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+strapSlotRightFront = clone(unitBoxExport)
+  |> scale(
+       x = 6,
+       y = 30,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 44mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+strapSlotLeftRear = clone(unitBoxExport)
+  |> scale(
+       x = 6,
+       y = 30,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -44mm,
+       y = -5mm,
+       z = 2mm,
+       global = true,
+     )
+strapSlotRightRear = clone(unitBoxExport)
+  |> scale(
+       x = 6,
+       y = 30,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 44mm,
+       y = -5mm,
+       z = 2mm,
+       global = true,
+     )
+rearVentLeft1 = clone(unitBoxExport)
+  |> scale(
+       x = 22,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -58mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+rearVentLeft2 = clone(unitBoxExport)
+  |> scale(
+       x = 22,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -32mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+rearVentRight1 = clone(unitBoxExport)
+  |> scale(
+       x = 22,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 32mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+rearVentRight2 = clone(unitBoxExport)
+  |> scale(
+       x = 22,
+       y = 5,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 58mm,
+       y = 55mm,
+       z = 2mm,
+       global = true,
+     )
+chargingCableOpening = clone(unitBoxExport)
+  |> scale(
+       x = 24,
+       y = 12,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = 63mm,
+       z = 2mm,
+       global = true,
+     )
+splicePocketLeft = clone(unitBoxExport)
+  |> scale(
+       x = 24.6,
+       y = 7.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -60mm,
+       y = -66.5mm,
+       z = 2mm,
+       global = true,
+     )
+splicePocketCenter = clone(unitBoxExport)
+  |> scale(
+       x = 24.6,
+       y = 7.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = -66.5mm,
+       z = 2mm,
+       global = true,
+     )
+splicePocketRight = clone(unitBoxExport)
+  |> scale(
+       x = 24.6,
+       y = 7.2,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = -66.5mm,
+       z = 2mm,
+       global = true,
+     )
+
+leftMotorHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -84mm,
+       y = 8mm,
+       z = 2mm,
+       global = true,
+     )
+leftMotorHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -52mm,
+       y = 8mm,
+       z = 2mm,
+       global = true,
+     )
+leftMotorHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -84mm,
+       y = 32mm,
+       z = 2mm,
+       global = true,
+     )
+leftMotorHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -52mm,
+       y = 32mm,
+       z = 2mm,
+       global = true,
+     )
+rightMotorHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 52mm,
+       y = 8mm,
+       z = 2mm,
+       global = true,
+     )
+rightMotorHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 84mm,
+       y = 8mm,
+       z = 2mm,
+       global = true,
+     )
+rightMotorHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 52mm,
+       y = 32mm,
+       z = 2mm,
+       global = true,
+     )
+rightMotorHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 84mm,
+       y = 32mm,
+       z = 2mm,
+       global = true,
+     )
+
+leftDriverHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -63mm,
+       y = 42mm,
+       z = 2mm,
+       global = true,
+     )
+leftDriverHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -27mm,
+       y = 42mm,
+       z = 2mm,
+       global = true,
+     )
+leftDriverHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -63mm,
+       y = 62mm,
+       z = 2mm,
+       global = true,
+     )
+leftDriverHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -27mm,
+       y = 62mm,
+       z = 2mm,
+       global = true,
+     )
+rightDriverHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 27mm,
+       y = 42mm,
+       z = 2mm,
+       global = true,
+     )
+rightDriverHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 63mm,
+       y = 42mm,
+       z = 2mm,
+       global = true,
+     )
+rightDriverHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 27mm,
+       y = 62mm,
+       z = 2mm,
+       global = true,
+     )
+rightDriverHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 63mm,
+       y = 62mm,
+       z = 2mm,
+       global = true,
+     )
+
+converterHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -84mm,
+       y = -56mm,
+       z = 2mm,
+       global = true,
+     )
+converterHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -64mm,
+       y = -56mm,
+       z = 2mm,
+       global = true,
+     )
+converterHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -84mm,
+       y = -40mm,
+       z = 2mm,
+       global = true,
+     )
+converterHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -64mm,
+       y = -40mm,
+       z = 2mm,
+       global = true,
+     )
+fuseHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 68mm,
+       y = -54mm,
+       z = 2mm,
+       global = true,
+     )
+fuseHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = -54mm,
+       z = 2mm,
+       global = true,
+     )
+fuseHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 68mm,
+       y = -46mm,
+       z = 2mm,
+       global = true,
+     )
+fuseHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = -46mm,
+       z = 2mm,
+       global = true,
+     )
+switchHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 68mm,
+       y = -33mm,
+       z = 2mm,
+       global = true,
+     )
+switchHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = -33mm,
+       z = 2mm,
+       global = true,
+     )
+switchHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 68mm,
+       y = -23mm,
+       z = 2mm,
+       global = true,
+     )
+switchHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = -23mm,
+       z = 2mm,
+       global = true,
+     )
+
+batteryHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -31mm,
+       y = -57mm,
+       z = 2mm,
+       global = true,
+     )
+batteryHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 31mm,
+       y = -57mm,
+       z = 2mm,
+       global = true,
+     )
+batteryHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -31mm,
+       y = 7mm,
+       z = 2mm,
+       global = true,
+     )
+batteryHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 31mm,
+       y = 7mm,
+       z = 2mm,
+       global = true,
+     )
+
+rearSpacerHole1 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+rearSpacerHole2 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = -45mm,
+       z = 2mm,
+       global = true,
+     )
+rearSpacerHole3 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -86mm,
+       y = 12mm,
+       z = 2mm,
+       global = true,
+     )
+rearSpacerHole4 = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 86mm,
+       y = 12mm,
+       z = 2mm,
+       global = true,
+     )
+rearJointHoleLeft = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -60mm,
+       y = -66.5mm,
+       z = 2mm,
+       global = true,
+     )
+rearJointHoleCenter = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 0mm,
+       y = -66.5mm,
+       z = 2mm,
+       global = true,
+     )
+rearJointHoleRight = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 60mm,
+       y = -66.5mm,
+       z = 2mm,
+       global = true,
+     )
+rearPanelHoleLeft = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = -80mm,
+       y = 64mm,
+       z = 2mm,
+       global = true,
+     )
+rearPanelHoleRight = clone(unitCylinderExport)
+  |> scale(
+       x = m3ClearanceDiameter / 1mm,
+       y = m3ClearanceDiameter / 1mm,
+       z = 10,
+       global = true,
+     )
+  |> translate(
+       x = 80mm,
+       y = 64mm,
+       z = 2mm,
+       global = true,
+     )
+
+rearPlateCut = subtract(
+  rearPlateBase,
+  tools = [
+    rearLeftMotorZone,
+    rearRightMotorZone,
+    batteryReserveZone,
+    leftDriverReserveZone,
+    rightDriverReserveZone,
+    voltageConverterReserveZone,
+    fuseReserveZone,
+    powerSwitchReserveZone,
+    leftWheelClearance,
+    rightWheelClearance,
+    leftMotorCableSlot,
+    rightMotorCableSlot,
+    centerCableSlotFront,
+    centerCableSlotRear,
+    leftDriverCableSlot,
+    rightDriverCableSlot,
+    batteryAccessOpening,
+    strapSlotLeftFront,
+    strapSlotRightFront,
+    strapSlotLeftRear,
+    strapSlotRightRear,
+    rearVentLeft1,
+    rearVentLeft2,
+    rearVentRight1,
+    rearVentRight2,
+    chargingCableOpening,
+    splicePocketLeft,
+    splicePocketCenter,
+    splicePocketRight,
+    leftMotorHole1,
+    leftMotorHole2,
+    leftMotorHole3,
+    leftMotorHole4,
+    rightMotorHole1,
+    rightMotorHole2,
+    rightMotorHole3,
+    rightMotorHole4,
+    leftDriverHole1,
+    leftDriverHole2,
+    leftDriverHole3,
+    leftDriverHole4,
+    rightDriverHole1,
+    rightDriverHole2,
+    rightDriverHole3,
+    rightDriverHole4,
+    converterHole1,
+    converterHole2,
+    converterHole3,
+    converterHole4,
+    fuseHole1,
+    fuseHole2,
+    fuseHole3,
+    fuseHole4,
+    switchHole1,
+    switchHole2,
+    switchHole3,
+    switchHole4,
+    batteryHole1,
+    batteryHole2,
+    batteryHole3,
+    batteryHole4,
+    rearSpacerHole1,
+    rearSpacerHole2,
+    rearSpacerHole3,
+    rearSpacerHole4,
+    rearJointHoleLeft,
+    rearJointHoleCenter,
+    rearJointHoleRight,
+    rearPanelHoleLeft,
+    rearPanelHoleRight
+  ],
+)
+
+batteryWallSketch = sketch(on = faceOf(rearPlateCut, face = END)) {
+  leftWallBottom = line(start = [var -40mm, var -64mm], end = [var -37mm, var -64mm])
+  leftWallInner = line(start = [var -37mm, var -64mm], end = [var -37mm, var 12.5mm])
+  rearWallInner = line(start = [var -37mm, var 12.5mm], end = [var 37mm, var 12.5mm])
+  rightWallInner = line(start = [var 37mm, var 12.5mm], end = [var 37mm, var -64mm])
+  rightWallBottom = line(start = [var 37mm, var -64mm], end = [var 40mm, var -64mm])
+  rightWallOuter = line(start = [var 40mm, var -64mm], end = [var 40mm, var 15.5mm])
+  rearWallOuter = line(start = [var 40mm, var 15.5mm], end = [var -40mm, var 15.5mm])
+  leftWallOuter = line(start = [var -40mm, var 15.5mm], end = [var -40mm, var -64mm])
+
+  coincident([
+    leftWallBottom.end,
+    leftWallInner.start
+  ])
+  coincident([leftWallInner.end, rearWallInner.start])
+  coincident([
+    rearWallInner.end,
+    rightWallInner.start
+  ])
+  coincident([
+    rightWallInner.end,
+    rightWallBottom.start
+  ])
+  coincident([
+    rightWallBottom.end,
+    rightWallOuter.start
+  ])
+  coincident([
+    rightWallOuter.end,
+    rearWallOuter.start
+  ])
+  coincident([rearWallOuter.end, leftWallOuter.start])
+  coincident([
+    leftWallOuter.end,
+    leftWallBottom.start
+  ])
+  horizontal(leftWallBottom)
+  vertical(leftWallInner)
+  horizontal(rearWallInner)
+  vertical(rightWallInner)
+  horizontal(rightWallBottom)
+  vertical(rightWallOuter)
+  horizontal(rearWallOuter)
+  vertical(leftWallOuter)
+  horizontalDistance([ORIGIN, leftWallBottom.start]) == -40mm
+  verticalDistance([ORIGIN, leftWallBottom.start]) == -64mm
+  distance([
+  leftWallBottom.start,
+  leftWallBottom.end
+]) == wallThickness
+  verticalDistance([leftWallInner.start, leftWallInner.end]) == 76.5mm
+  distance([rearWallInner.start, rearWallInner.end]) == 74mm
+  verticalDistance([
+  rightWallInner.start,
+  rightWallInner.end
+]) == -76.5mm
+  distance([
+  rightWallBottom.start,
+  rightWallBottom.end
+]) == wallThickness
+  verticalDistance([
+  rightWallOuter.start,
+  rightWallOuter.end
+]) == 79.5mm
+  distance([rearWallOuter.start, rearWallOuter.end]) == 80mm
+}
+
+batteryWallRegion = region(point = [-38.5mm, -20mm], sketch = batteryWallSketch)
+export lowerRearPlateFinal = extrude(batteryWallRegion, length = 9mm, method = MERGE)
+  |> appearance(color = "#c9822f", roughness = 62, metalness = 0)
+
+hide(rearPlateSketch)
+hide(batteryWallSketch)
+lowerRearPlateFinal

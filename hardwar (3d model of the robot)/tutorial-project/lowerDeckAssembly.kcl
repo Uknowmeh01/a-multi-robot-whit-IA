@@ -1,0 +1,16 @@
+// Split lower-deck subassembly
+// Inspection view of the front and rear printable plate sections in their assembled positions.
+@settings(defaultLengthUnit = mm)
+
+import * from "parameters.kcl"
+import "lowerFrontPlate.kcl" as lowerFrontPlatePart
+import "lowerRearPlateFinal.kcl" as lowerRearPlatePart
+
+lowerDeckFront = lowerFrontPlatePart
+  |> translate(y = -lowerDeckSectionOffset, global = true)
+lowerDeckRear = lowerRearPlatePart
+  |> translate(y = lowerDeckSectionOffset, global = true)
+
+export lowerDeckAssembly = flatten([lowerDeckFront, lowerDeckRear])
+
+lowerDeckAssembly
